@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using PasteBin.Data;
 using PasteBin.Models;
 using PasteBin.Services;
+using PasteBin.Data.Repositories.Pastes;
+using PasteBin.Data.Repositories.Languages;
 
 namespace PasteBin
 {
@@ -52,6 +54,8 @@ namespace PasteBin
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddScoped<IPasteRepository, PasteRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +74,8 @@ namespace PasteBin
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.SeedData();
 
             app.UseStaticFiles();
 
