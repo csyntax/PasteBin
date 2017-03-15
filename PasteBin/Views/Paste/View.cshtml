@@ -4,17 +4,8 @@
     ViewData["Title"] = "View";
 }
 
-<div class="row">
-    <div class="col-xs-8 col-xs-offset-2">
-        <div class="well">
-            <pre>
-            <code class="@(Model.Language?.Tag ?? "no-highlight")">@Model.Content</code>
-            </pre>
-            <span class="label label-primary">Language: @(Model.Language?.Name ?? "None")</span>
-        </div>
-    </div>
-</div>
+<pre><code class="@(Model.Language?.Tag ?? "no-highlight")">
+@Model.Content
+</code></pre>
 
-<link rel="stylesheet" href="~/lib/highlightjs/styles/zenburn.css">
-<script src="~/lib/highlightjs/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+<span class="label label-primary">Language: @(Model.Language?.Name ?? "None")</span>
