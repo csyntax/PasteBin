@@ -11000,10 +11000,10 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\users\\ivan ivanov\\documents\\visual studio 2017\\Projects\\PasteBin\\PasteBin\\PasteBin.csproj",
+      "projectUniqueName": "C:\\Users\\Ivan Ivanov\\Documents\\GitHub\\PasteBin\\PasteBin\\PasteBin.csproj",
       "projectName": "PasteBin",
-      "projectPath": "c:\\users\\ivan ivanov\\documents\\visual studio 2017\\Projects\\PasteBin\\PasteBin\\PasteBin.csproj",
-      "outputPath": "c:\\users\\ivan ivanov\\documents\\visual studio 2017\\Projects\\PasteBin\\PasteBin\\obj\\",
+      "projectPath": "C:\\Users\\Ivan Ivanov\\Documents\\GitHub\\PasteBin\\PasteBin\\PasteBin.csproj",
+      "outputPath": "C:\\Users\\Ivan Ivanov\\Documents\\GitHub\\PasteBin\\PasteBin\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netcoreapp1.1"
