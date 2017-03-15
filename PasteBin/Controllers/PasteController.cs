@@ -20,6 +20,7 @@ namespace PasteBin.Controllers
             this.languageRepository = languageRepository;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
@@ -28,6 +29,7 @@ namespace PasteBin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePasteViewModel model)
         {
             if (ModelState.IsValid)
