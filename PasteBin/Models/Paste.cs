@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PasteBin.Models
 {
@@ -10,8 +11,10 @@ namespace PasteBin.Models
             this.ExpiryDate = DateTime.Now.AddDays(3);
         }
 
+        [Key]
         public int Id { get; set; }
 
+        [DataType(DataType.MultilineText)]
         public string Content { get; set; }
 
         public DateTime CreatedDate { get; set; }
