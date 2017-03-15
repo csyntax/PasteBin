@@ -13,14 +13,17 @@ namespace PasteBin.Controllers
         private readonly IPasteRepository pasteRepository;
         private readonly ILanguageRepository languageRepository;
 
-        public PasteController()
+        public PasteController(IPasteRepository pasteRepository, ILanguageRepository languageRepository)
         {
-
+            this.pasteRepository = pasteRepository;
+            this.languageRepository = languageRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            this.ViewData["Languages"] = await languageRepository.GetAllAsync();
+
+            return this.View();
         }
     }
 }
