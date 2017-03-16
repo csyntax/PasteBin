@@ -49,6 +49,7 @@ namespace PasteBin.Controllers
 
                 var paste = new Paste
                 {
+                    Title = model.Title,
                     Content = model.Content,
                     CreatedOn = DateTime.Now,
                     UserId = this.userManager.GetUserId(User),
