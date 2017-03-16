@@ -14,11 +14,11 @@ namespace PasteBin.Components
             this.pasteRepository = pasteRepository;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var pastes = this.pasteRepository.GetAllAsync();
+            var pastes = await this.pasteRepository.GetAllAsync();
 
-            return this.View("Sidebar", pastes);
+            return View("Sidebar", pastes);
         }
     }
 }
