@@ -32,7 +32,7 @@ namespace PasteBin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePasteViewModel model)
         {
-            if (ModelState.IsValid)
+            if (model != null && ModelState.IsValid)
             {
                 var language = await this.languageRepository.FindOneAsync(m => m.Id == model.Language);
 
@@ -44,7 +44,7 @@ namespace PasteBin.Controllers
 
                 await this.pasteRepository.AddAsync(paste);
 
-                return this.RedirectToAction("View", new { id = paste.Id });
+                return this.RedirectToAction("Details", new { id = paste.Id });
             }
 
             this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
@@ -52,7 +52,8 @@ namespace PasteBin.Controllers
             return this.View("Index", model);
         }
 
-        public async Task<IActionResult> View(int id)
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
         {
             var paste = await this.pasteRepository.FindOneAsync(p => p.Id == id);
 
