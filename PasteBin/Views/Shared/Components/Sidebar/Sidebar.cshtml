@@ -4,7 +4,7 @@
     @foreach (var paste in Model)
     {
         <li class="list-group-item">
-            <a asp-controller="Pastes" asp-action="Details" asp-route-id="paste.Id">@paste.Id</a>
+            <a asp-controller="Pastes" asp-action="Details" asp-route-id="@paste.Id">@paste.Id</a>
         </li>
     }
 </ul>
