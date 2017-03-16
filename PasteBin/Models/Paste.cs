@@ -5,23 +5,21 @@ namespace PasteBin.Models
 {
     public class Paste
     {
-        public Paste()
-        {
-            this.CreatedDate = DateTime.Now;
-            this.ExpiryDate = DateTime.Now.AddDays(3);
-        }
-
         [Key]
         public int Id { get; set; }
 
+        [Required]
         [DataType(DataType.MultilineText)]
         public string Content { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-
-        public DateTime ExpiryDate { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime CreatedOn { get; set; }
 
         public bool Private { get; set; }
+
+        public string UserId { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
 
         public int? LanguageId { get; set; }
 
