@@ -16,7 +16,7 @@ namespace PasteBin.Data.Repositories.Pastes
 
         protected override IQueryable<Paste> AddIncludes(IQueryable<Paste> queryable)
         {
-            return queryable.Include(p => p.Language);
+            return queryable.Include(p => p.Language).Include(p => p.User);
         }
     }
 }

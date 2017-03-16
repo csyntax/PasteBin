@@ -32,6 +32,20 @@ namespace PasteBin.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Details(int id)
+        {
+            var paste = await this.pasteRepository.FindOneAsync(p => p.Id == id);
+
+            if (paste == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return this.View(paste);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
@@ -63,20 +77,7 @@ namespace PasteBin.Controllers
 
             this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
 
-            return this.View("Create", model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
-        {
-            var paste = await this.pasteRepository.FindOneAsync(p => p.Id == id);
-
-            if (paste == null)
-            {
-                return new NotFoundResult();
-            }
-
-            return this.View(paste);
+            return this.View(model);
         }
     }
 }

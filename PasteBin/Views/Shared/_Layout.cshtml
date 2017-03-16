@@ -19,6 +19,11 @@
             <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         </environment>
 
+        <link href="~/lib/bootswatch/darkly/bootstrap.min.css" rel="stylesheet" />
+
+        <link href="~/lib//highlightjs/styles/atom-one-light.css" rel="stylesheet" />
+        <script src="~/lib/highlightjs/highlight.pack.min.js"></script>
+
         @Html.Raw(JavaScriptSnippet.FullScript)
     </head>
     <body>
@@ -56,9 +61,8 @@
             </div>
         </div>
 
-        <hr />
         <footer>
-            <p>&copy; 2017 - PasteBin</p>
+            Powered by <strong>ASP.NET Core MVC</strong>.
         </footer>
 
         <environment names="Development">
@@ -81,9 +85,6 @@
             </script>
             <script src="~/js/site.min.js" asp-append-version="true"></script>
         </environment>
-
-        <link href="~/lib//highlightjs/styles/atom-one-light.css" rel="stylesheet" />
-        <script src="~/lib/highlightjs/highlight.pack.min.js"></script>
 
         <script>
             $(document).ready(function () {

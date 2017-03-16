@@ -18,7 +18,7 @@ namespace PasteBin.Components
         {
             var pastes = await this.pasteRepository.GetAllAsync();
 
-            return this.View("Sidebar", pastes);
+            return this.View(pastes);
         }
     }
 }
