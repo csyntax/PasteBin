@@ -2,20 +2,22 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using PasteBin.Models;
 using PasteBin.Data.Repositories.Pastes;
 using PasteBin.Data.Repositories.Languages;
-using PasteBin.Models;
-
 
 namespace PasteBin.Controllers
 {
-    public class PasteController : Controller
+    [Authorize]
+    public class PastesController : Controller
     {
         private readonly IPasteRepository pasteRepository;
         private readonly ILanguageRepository languageRepository;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public PasteController(IPasteRepository pasteRepository, ILanguageRepository languageRepository, UserManager<ApplicationUser> userManager)
+        public PastesController(IPasteRepository pasteRepository, ILanguageRepository languageRepository, 
+            UserManager<ApplicationUser> userManager)
         {
             this.pasteRepository = pasteRepository;
             this.languageRepository = languageRepository;
@@ -23,6 +25,7 @@ namespace PasteBin.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return this.View();

@@ -1,32 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using PasteBin.Data.Repositories.Languages;
 
 namespace PasteBin.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ILanguageRepository languageRepository;
+
+        public HomeController(ILanguageRepository languageRepository)
         {
-            return View();
+            this.languageRepository = languageRepository;
         }
 
-        public IActionResult About()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            ViewData["Message"] = "Your application description page.";
+            this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
 
-            return View();
+            return this.View();
         }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
+        [HttpGet]
         public IActionResult Error()
         {
             return View();
