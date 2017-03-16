@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using PasteBin.Data.Repositories.Pastes;
 using PasteBin.Data.Repositories.Languages;
 using PasteBin.Models;
+
 
 namespace PasteBin.Controllers
 {
@@ -13,15 +13,23 @@ namespace PasteBin.Controllers
     {
         private readonly IPasteRepository pasteRepository;
         private readonly ILanguageRepository languageRepository;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public PasteController(IPasteRepository pasteRepository, ILanguageRepository languageRepository)
+        public PasteController(IPasteRepository pasteRepository, ILanguageRepository languageRepository, UserManager<ApplicationUser> userManager)
         {
             this.pasteRepository = pasteRepository;
             this.languageRepository = languageRepository;
+            this.userManager = userManager;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
+        {
+            return this.View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
             this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
 
@@ -30,15 +38,17 @@ namespace PasteBin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreatePasteViewModel model)
+        public async Task<IActionResult> Create([FromForm] Paste model)
         {
             if (model != null && ModelState.IsValid)
             {
-                var language = await this.languageRepository.FindOneAsync(m => m.Id == model.Language);
+                var language = await this.languageRepository.FindOneAsync(m => m.Id == model.LanguageId);
 
                 var paste = new Paste
                 {
                     Content = model.Content,
+                    CreatedOn = DateTime.Now,
+                    UserId = this.userManager.GetUserId(User),
                     Language = language
                 };
 
@@ -49,7 +59,7 @@ namespace PasteBin.Controllers
 
             this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
 
-            return this.View("Index", model);
+            return this.View("Create", model);
         }
 
         [HttpGet]

@@ -8,7 +8,7 @@ using PasteBin.Data;
 namespace PasteBin.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170315191428_Initial")]
+    [Migration("20170316083059_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,19 +193,22 @@ namespace PasteBin.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .IsRequired();
 
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<DateTime>("ExpiryDate");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<int?>("LanguageId");
 
                     b.Property<bool>("Private");
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LanguageId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Pastes");
                 });
@@ -252,6 +255,10 @@ namespace PasteBin.Data.Migrations
                     b.HasOne("PasteBin.Models.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId");
+
+                    b.HasOne("PasteBin.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
         }
     }

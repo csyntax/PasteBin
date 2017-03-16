@@ -1,25 +1,5 @@
-@model PasteBin.Models.CreatePasteViewModel
-
 @{
     ViewData["Title"] = "Index";
 }
 
-<form asp-controller="Paste" asp-action="Create" method="POST">
-    @Html.AntiForgeryToken()
-    
-    <div class="form-group">
-        <label asp-for="Content" class="control-label">Paste Content</label>
-        <textarea asp-for="Content" class="form-control" rows="8"></textarea>
-        <span asp-validation-for="Content" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="Language" class="control-label">Language</label>
-        <select class="form-control" asp-for="Language" asp-items="@(new SelectList(ViewBag.Languages, "Id", "Name"))">
-            <option value="0">Please Select..</option>
-        </select>
-        <span asp-validation-for="Language" class="text-danger"></span>
-    </div>
-    
-    <button type="submit" class="btn btn-success">Create</button>
-</form>
+<a asp-controller="Paste" asp-action="Create" class="btn btn-success">Create Paste</a>

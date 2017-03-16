@@ -37,11 +37,11 @@ namespace PasteBin.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Content = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ExpiryDate = table.Column<DateTime>(nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     LanguageId = table.Column<int>(nullable: true),
-                    Private = table.Column<bool>(nullable: false)
+                    Private = table.Column<bool>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,6 +50,12 @@ namespace PasteBin.Data.Migrations
                         name: "FK_Pastes_Languages_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "Languages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Pastes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -64,6 +70,11 @@ namespace PasteBin.Data.Migrations
                 name: "IX_Pastes_LanguageId",
                 table: "Pastes",
                 column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pastes_UserId",
+                table: "Pastes",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
