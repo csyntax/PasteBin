@@ -72,7 +72,10 @@ namespace PasteBin.Controllers
 
                 await this.pasteRepository.AddAsync(paste);
 
-                return this.RedirectToAction("Details", new { id = paste.Id });
+                return this.RedirectToAction("Details", new
+                {
+                    id = paste.Id
+                });
             }
 
             this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();

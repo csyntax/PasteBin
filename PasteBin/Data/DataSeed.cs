@@ -12,6 +12,11 @@ namespace PasteBin.Data
         {
             using (var db = app.ApplicationServices.GetService<ApplicationDbContext>())
             {
+                if(db.Languages.Any())
+                {
+                    return;
+                }
+
                 var languages = new List<Language>
                 {
                     new Language { Name = "Apache", Tag = "apache" },
@@ -38,13 +43,10 @@ namespace PasteBin.Data
                     new Language { Name = "SQL", Tag = "sql" }
                 };
 
-                if (!db.Languages.Any())
+                foreach (var language in languages)
                 {
-                    foreach (var language in languages)
-                    {
-                        db.Languages.Add(language);
-                        db.SaveChanges();
-                    }
+                    db.Languages.Add(language);
+                    db.SaveChanges();
                 }
             }
         }
