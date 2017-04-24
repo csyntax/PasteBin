@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using PasteBin.Models;
 
@@ -12,7 +12,7 @@ namespace PasteBin.Data
         {
             using (var db = app.ApplicationServices.GetService<ApplicationDbContext>())
             {
-                if(db.Languages.Any())
+                if (db.Languages.Any())
                 {
                     return;
                 }
