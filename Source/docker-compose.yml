@@ -1,8 +1,0 @@
-version: '2'
-
-services:
-  pastebin:
-    image: pastebin
-    build:
-      context: ./PasteBin
-      dockerfile: Dockerfile
