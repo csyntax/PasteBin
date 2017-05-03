@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using PasteBin.Data;
 using PasteBin.Models;
 using PasteBin.Services;
+using PasteBin.Data.Seeding;
 
 namespace PasteBin
 {
@@ -43,7 +44,15 @@ namespace PasteBin
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                 options =>
+                 {
+                     options.Password.RequireDigit = false;
+                     options.Password.RequireLowercase = false;
+                     options.Password.RequireUppercase = false;
+                     options.Password.RequireNonAlphanumeric = false;
+                     options.Password.RequiredLength = 6;
+                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -57,6 +66,13 @@ namespace PasteBin
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // Seed data on application startup
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                ApplicationDbContextSeeder.Seed(dbContext);
+            }
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
