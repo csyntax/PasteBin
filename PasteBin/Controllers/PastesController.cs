@@ -23,7 +23,14 @@ namespace PasteBin.Controllers
             this.userManager = userManager;
         }
 
+        [HttpGet]
         public IActionResult Index()
+        {
+            return this.View();
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id)
         {
             return this.View();
         }
@@ -37,12 +44,12 @@ namespace PasteBin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Paste model)
         {
             if (model != null && this.ModelState.IsValid)
             {
                 var user = this.userManager.GetUserAsync(User).Result;
-
                 var language = this.languageRepository.Find(model.LanguageId.Value);
 
                 var paste = new Paste
