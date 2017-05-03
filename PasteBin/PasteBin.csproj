@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <UserSecretsId>aspnet-PasteBin-3f2053d8-a39f-456b-8346-40b0a0af9736</UserSecretsId>
+    <UserSecretsId>aspnet-PasteBin-4bbe0683-d72a-477e-9524-82123e34deb5</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />

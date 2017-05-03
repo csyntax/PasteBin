@@ -5,13 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using PasteBin.Data;
 
-namespace PasteBin.Migrations
+namespace PasteBin.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170502202312_InitialCreate")]
-    partial class InitialCreate
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -260,7 +259,7 @@ namespace PasteBin.Migrations
                         .HasForeignKey("LanguageId");
 
                     b.HasOne("PasteBin.Models.ApplicationUser", "User")
-                        .WithMany("Pastes")
+                        .WithMany()
                         .HasForeignKey("UserId");
                 });
         }

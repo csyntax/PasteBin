@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasteBin", "PasteBin\PasteBin.csproj", "{90D62197-3105-4F7A-AA5B-8B544834185F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasteBin", "PasteBin\PasteBin.csproj", "{4F7D2135-E8A8-421E-8254-85B99871591E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{90D62197-3105-4F7A-AA5B-8B544834185F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90D62197-3105-4F7A-AA5B-8B544834185F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90D62197-3105-4F7A-AA5B-8B544834185F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90D62197-3105-4F7A-AA5B-8B544834185F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F7D2135-E8A8-421E-8254-85B99871591E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F7D2135-E8A8-421E-8254-85B99871591E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F7D2135-E8A8-421E-8254-85B99871591E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F7D2135-E8A8-421E-8254-85B99871591E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
