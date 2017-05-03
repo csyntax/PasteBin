@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasteBin", "PasteBin\PasteBin.csproj", "{4F7D2135-E8A8-421E-8254-85B99871591E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasteBin", "PasteBin\PasteBin.csproj", "{4F7D2135-E8A8-421E-8254-85B99871591E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

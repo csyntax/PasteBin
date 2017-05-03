@@ -13,6 +13,7 @@ using PasteBin.Data;
 using PasteBin.Models;
 using PasteBin.Services;
 using PasteBin.Data.Seeding;
+using PasteBin.Data.Repositories;
 
 namespace PasteBin
 {
@@ -32,7 +33,8 @@ namespace PasteBin
             }
 
             builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+
+            this.Configuration = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -61,6 +63,9 @@ namespace PasteBin
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // Data
+            services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +75,7 @@ namespace PasteBin
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
                 ApplicationDbContextSeeder.Seed(dbContext);
             }
 
