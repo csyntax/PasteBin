@@ -1,22 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PasteBin.Data.Repositories;
 using PasteBin.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using PasteBin.Data.Repositories.Pastes;
 
 namespace PasteBin.Controllers
 {
     public class PastesController : Controller
     {
         private readonly IDbRepository<Language> languageRepository;
-        private readonly IDbRepository<Paste> pasteRepository;
+        private readonly IPasteRepository pasteRepository;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public PastesController(IDbRepository<Language> languageRepository, 
-            IDbRepository<Paste> pasteRepository, UserManager<ApplicationUser> userManager)
+        public PastesController(IDbRepository<Language> languageRepository,
+            IPasteRepository pasteRepository, UserManager<ApplicationUser> userManager)
         {
             this.languageRepository = languageRepository;
             this.pasteRepository = pasteRepository;
@@ -32,7 +31,9 @@ namespace PasteBin.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            return this.View();
+            var paste = this.pasteRepository.Find(id);
+
+            return this.View(paste);
         }
 
         [HttpGet]
@@ -50,7 +51,7 @@ namespace PasteBin.Controllers
             if (model != null && this.ModelState.IsValid)
             {
                 var user = this.userManager.GetUserAsync(User).Result;
-                var language = this.languageRepository.Find(model.LanguageId.Value);
+                var language = this.languageRepository.Find(model.LanguageId);
 
                 var paste = new Paste
                 {

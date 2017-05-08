@@ -11,6 +11,8 @@
   <PropertyGroup>
     <UserSecretsId>aspnet-PasteBin-4bbe0683-d72a-477e-9524-82123e34deb5</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <Authors>Ivan Ivanov</Authors>
+    <Company>Ivan Ivanov</Company>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
@@ -36,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Pastes\" />
+    <Folder Include="Views\Shared\Components\Sidebar\" />
   </ItemGroup>
 
 </Project>

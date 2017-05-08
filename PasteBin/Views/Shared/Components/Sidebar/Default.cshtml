@@ -1,0 +1,13 @@
+@model IEnumerable<PasteBin.Models.Paste>
+
+<ul class="list-group">
+    @foreach (var paste in Model)
+    {
+        <li class="list-group-item">
+            <a asp-controller="Pastes" asp-action="Details" asp-route-id="@paste.Id">
+                @paste.Title
+            </a>
+            <span class="badge">@paste.Language.Name</span>
+        </li>
+    }
+</ul>

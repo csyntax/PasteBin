@@ -23,8 +23,8 @@ namespace PasteBin.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Tag = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    Tag = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -39,9 +39,9 @@ namespace PasteBin.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
-                    LanguageId = table.Column<int>(nullable: true),
+                    LanguageId = table.Column<int>(nullable: false),
                     Private = table.Column<bool>(nullable: false),
-                    Title = table.Column<string>(nullable: false),
+                    Title = table.Column<string>(maxLength: 300, nullable: false),
                     UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -52,7 +52,7 @@ namespace PasteBin.Data.Migrations
                         column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Pastes_AspNetUsers_UserId",
                         column: x => x.UserId,

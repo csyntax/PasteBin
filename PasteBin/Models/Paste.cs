@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PasteBin.Models
 {
@@ -9,6 +10,8 @@ namespace PasteBin.Models
         public int Id { get; set; }
 
         [Required]
+        [MinLength(3)]
+        [MaxLength(300)]
         public string Title { get; set; }
 
         [Required]
@@ -22,10 +25,12 @@ namespace PasteBin.Models
 
         public string UserId { get; set; }
 
+        [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
 
-        public int? LanguageId { get; set; }
+        public int LanguageId { get; set; }
 
+        [ForeignKey("LanguageId")]
         public virtual Language Language { get; set; }
     }
 }

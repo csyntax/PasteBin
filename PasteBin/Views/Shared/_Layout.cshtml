@@ -20,8 +20,8 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 
-    <link href="~/lib//highlightjs/styles/atom-one-light.css" rel="stylesheet" />
-    <script src="~/lib/highlightjs/highlight.pack.min.js"></script>
+    <link href="~/lib/highlight/src/styles/atom-one-light.css" rel="stylesheet" />
+    <script src="~/lib/highlight/src/highlight.js"></script>
 
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
@@ -54,15 +54,7 @@
                 @RenderBody()
             </main>
             <aside class="col-md-4">
-                <div class="list-group">
-                    <a href="#" class="list-group-item active">
-                        Cras justo odio
-                    </a>
-                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-                    <a href="#" class="list-group-item">Morbi leo risus</a>
-                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                    <a href="#" class="list-group-item">Vestibulum at eros</a>
-                </div>
+                @await Component.InvokeAsync("Sidebar")
             </aside>
         </div>
         <hr />

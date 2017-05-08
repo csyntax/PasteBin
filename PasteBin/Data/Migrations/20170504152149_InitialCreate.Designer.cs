@@ -8,7 +8,7 @@ using PasteBin.Data;
 namespace PasteBin.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170503082634_InitialCreate")]
+    [Migration("20170504152149_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -179,9 +179,11 @@ namespace PasteBin.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
-                    b.Property<string>("Tag");
+                    b.Property<string>("Tag")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -198,12 +200,13 @@ namespace PasteBin.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<int?>("LanguageId");
+                    b.Property<int>("LanguageId");
 
                     b.Property<bool>("Private");
 
                     b.Property<string>("Title")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(300);
 
                     b.Property<string>("UserId");
 
@@ -257,10 +260,11 @@ namespace PasteBin.Data.Migrations
                 {
                     b.HasOne("PasteBin.Models.Language", "Language")
                         .WithMany()
-                        .HasForeignKey("LanguageId");
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PasteBin.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Pastes")
                         .HasForeignKey("UserId");
                 });
         }
