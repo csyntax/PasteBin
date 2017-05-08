@@ -20,8 +20,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 
-    <link href="~/lib/highlight/src/styles/atom-one-light.css" rel="stylesheet" />
-    <script src="~/lib/highlight/src/highlight.js"></script>
+    <link href="~/lib/highlight/src/styles/arduino-light.css" rel="stylesheet" />
 
     @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
@@ -85,10 +84,13 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
+    <script src="~/lib/highlight/src/highlight.js"></script>
     <script>
-         $(document).ready(function () {
-             hljs.initHighlightingOnLoad();
-         });
+        $(document).ready(function () {
+            $("pre > code").each(function (n, t) {
+                hljs.highlightBlock(t);
+            });
+        });
     </script>
 
     @RenderSection("Scripts", required: false)

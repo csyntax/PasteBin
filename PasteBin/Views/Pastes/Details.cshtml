@@ -4,13 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h4>Paste</h4>
-
-<pre><code class="@Model.Language.Tag">@Model.Content</code></pre>
-
-
-@*
-<span class="label label-primary">Language: @(Model.Language?.Name ?? "None")</span>
+<h4>Paste: @Model.Title</h4>
+<span class="label label-primary">Language: @Model.Language.Name</span>
 <span class="label label-info">Created On: @Model.CreatedOn</span>
 <span class="label label-info">Created By: @Model.User.UserName</span>
-*@
+<hr />
+
+<pre><code class="@Model.Language.Tag">@Model.Content</code></pre>

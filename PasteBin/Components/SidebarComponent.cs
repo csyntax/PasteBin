@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PasteBin.Data.Repositories;
+using PasteBin.Data.Repositories.Pastes;
 using PasteBin.Models;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,22 +11,16 @@ namespace PasteBin.Components
     [ViewComponent(Name = "Sidebar")]
     public class SidebarComponent : ViewComponent
     {
-        private readonly IDbRepository<Paste> pasteRepository;
+        private readonly IPasteRepository pasteRepository;
 
-        public SidebarComponent(IDbRepository<Paste> pasteRepository)
+        public SidebarComponent(IPasteRepository pasteRepository)
         {
             this.pasteRepository = pasteRepository;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var pastes = await this.pasteRepository
-                .All()
-                .Include(p => p.Language)
-                .Include(p => p.User)
-                .OrderByDescending(p => p.CreatedOn)
-                .Take(5)
-                .ToListAsync();
+            var pastes = await this.pasteRepository.GetAllAsync();
 
             return this.View(pastes);
         }

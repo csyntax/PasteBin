@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using PasteBin.Data.Repositories.Pastes;
+using System.Threading.Tasks;
 
 namespace PasteBin.Controllers
 {
@@ -29,29 +30,29 @@ namespace PasteBin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var paste = this.pasteRepository.Find(id);
+            var paste = await this.pasteRepository.FindOneAsync(x => x.Id == id);
 
             return this.View(paste);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            this.ViewData["Languages"] = this.languageRepository.All();
+            this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
 
             return this.View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Paste model)
+        public async Task<IActionResult> Create(Paste model)
         {
             if (model != null && this.ModelState.IsValid)
             {
-                var user = this.userManager.GetUserAsync(User).Result;
-                var language = this.languageRepository.Find(model.LanguageId);
+                var user = await this.userManager.GetUserAsync(User);
+                var language = await this.languageRepository.FindOneAsync(x => x.Id == model.LanguageId);
 
                 var paste = new Paste
                 {
@@ -61,8 +62,8 @@ namespace PasteBin.Controllers
                     User = user
                 };
 
-                this.pasteRepository.Add(paste);
-                this.pasteRepository.SaveChanges();
+                await this.pasteRepository.AddAsync(paste);
+                //this.pasteRepository.SaveChanges();
 
                 return this.RedirectToAction("Details", new
                 {
@@ -70,7 +71,7 @@ namespace PasteBin.Controllers
                 });
             }
 
-            this.ViewData["Languages"] = this.languageRepository.All();
+            this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
 
             return this.View(model);
         }
