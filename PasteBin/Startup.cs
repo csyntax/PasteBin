@@ -15,6 +15,7 @@ using PasteBin.Services;
 using PasteBin.Data.Seeding;
 using PasteBin.Data.Repositories;
 using PasteBin.Data.Repositories.Pastes;
+using PasteBin.Data.Repositories.Languages;
 
 namespace PasteBin
 {
@@ -68,6 +69,7 @@ namespace PasteBin
             // Data
             services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
             services.AddScoped<IPasteRepository, PasteRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

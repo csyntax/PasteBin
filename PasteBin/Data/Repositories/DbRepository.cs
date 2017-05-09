@@ -19,39 +19,35 @@ namespace PasteBin.Data.Repositories
             this.dbSet = this.context.Set<TEntity>();
         }
 
-        public async Task AddAsync(TEntity entity)
+        public IQueryable<TEntity> All()
+        {
+            return this.GetQuery().AsQueryable();
+        }
+
+        public TEntity Find(Expression<Func<TEntity, bool>> criteria)
+        {
+            return this.GetQuery().Where(criteria).FirstOrDefault();
+        }
+
+        public void Add(TEntity entity)
         {
             this.dbSet.Add(entity);
 
-            await this.context.SaveChangesAsync();
+            this.context.SaveChanges();
         }
 
-        public async Task DeleteAsync(TEntity entity)
-        {
-            this.dbSet.Remove(entity);
-            await this.context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> criteria)
-        {
-            return await this.GetQuery().Where(criteria).ToListAsync();
-        }
-
-        public async Task<TEntity> FindOneAsync(Expression<Func<TEntity, bool>> criteria)
-        {
-            return await this.GetQuery().Where(criteria).FirstOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            return await this.GetQuery().ToListAsync();
-        }
-
-        public async Task UpdateAsync(TEntity entity)
+        public void Update(TEntity entity)
         {
             this.dbSet.Attach(entity);
 
-            await this.context.SaveChangesAsync();
+            this.context.SaveChanges();
+        }
+
+        public void Delete(TEntity entity)
+        {
+            this.dbSet.Remove(entity);
+
+            this.context.SaveChanges();
         }
 
         protected virtual IQueryable<TEntity> AddIncludes(IQueryable<TEntity> queryable)

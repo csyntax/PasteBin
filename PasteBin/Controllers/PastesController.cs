@@ -1,21 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
-using PasteBin.Data.Repositories;
-using PasteBin.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using PasteBin.Data.Repositories.Pastes;
 using System.Threading.Tasks;
+using PasteBin.Models;
+using PasteBin.Data.Repositories.Pastes;
+using PasteBin.Data.Repositories.Languages;
 
 namespace PasteBin.Controllers
 {
     public class PastesController : Controller
     {
-        private readonly IDbRepository<Language> languageRepository;
+        private readonly ILanguageRepository languageRepository;
         private readonly IPasteRepository pasteRepository;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public PastesController(IDbRepository<Language> languageRepository,
+        public PastesController(ILanguageRepository languageRepository,
             IPasteRepository pasteRepository, UserManager<ApplicationUser> userManager)
         {
             this.languageRepository = languageRepository;
@@ -30,9 +29,9 @@ namespace PasteBin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public IActionResult Details(int id)
         {
-            var paste = await this.pasteRepository.FindOneAsync(x => x.Id == id);
+            var paste = this.pasteRepository.Find(x => x.Id == id);
 
             return this.View(paste);
         }
@@ -40,7 +39,7 @@ namespace PasteBin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
+            this.ViewData["Languages"] = await this.languageRepository.All().ToListAsync();
 
             return this.View();
         }
@@ -52,7 +51,7 @@ namespace PasteBin.Controllers
             if (model != null && this.ModelState.IsValid)
             {
                 var user = await this.userManager.GetUserAsync(User);
-                var language = await this.languageRepository.FindOneAsync(x => x.Id == model.LanguageId);
+                var language = this.languageRepository.Find(x => x.Id == model.LanguageId);
 
                 var paste = new Paste
                 {
@@ -62,8 +61,7 @@ namespace PasteBin.Controllers
                     User = user
                 };
 
-                await this.pasteRepository.AddAsync(paste);
-                //this.pasteRepository.SaveChanges();
+                this.pasteRepository.Add(paste);
 
                 return this.RedirectToAction("Details", new
                 {
@@ -71,7 +69,7 @@ namespace PasteBin.Controllers
                 });
             }
 
-            this.ViewData["Languages"] = await this.languageRepository.GetAllAsync();
+            this.ViewData["Languages"] = await this.languageRepository.All().ToListAsync();
 
             return this.View(model);
         }
