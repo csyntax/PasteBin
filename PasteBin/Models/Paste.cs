@@ -6,6 +6,11 @@ namespace PasteBin.Models
 {
     public class Paste
     {
+        public Paste()
+        {
+            this.CreatedOn = DateTime.Now;
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -19,6 +24,7 @@ namespace PasteBin.Models
         public string Content { get; set; }
 
         [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd MMMM yyyy}")]
         public DateTime CreatedOn { get; set; }
 
         public bool Private { get; set; }

@@ -1,7 +1,18 @@
+@model IEnumerable<PasteBin.Models.Paste>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Your Pastes";
 }
 
-<h2>Index</h2>
+<header>
+    <h4>Pastes by @ViewData["Username"]</h4>
 
+    <hr />
+</header>
+
+@foreach (var paste in Model)
+{
+    <div>
+        <h2>@paste.Title</h2>
+    </div>
+}

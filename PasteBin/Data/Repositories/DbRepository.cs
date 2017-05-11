@@ -1,14 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PasteBin.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PasteBin.Data.Repositories
 {
-    public class DbRepository<TEntity> : IDbRepository<TEntity> where TEntity : class
+    public class DbRepository<TEntity> : IDbRepository<TEntity> 
+        where TEntity : class
     {
         private readonly ApplicationDbContext context;
         private readonly DbSet<TEntity> dbSet;

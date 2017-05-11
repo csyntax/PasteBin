@@ -4,7 +4,8 @@ using System.Linq.Expressions;
 
 namespace PasteBin.Data.Repositories
 {
-    public interface IDbRepository<TEntity> where TEntity : class
+    public interface IDbRepository<TEntity> 
+        where TEntity : class
     {
         IQueryable<TEntity> All();
 

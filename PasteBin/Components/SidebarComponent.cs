@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PasteBin.Data.Repositories.Pastes;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using PasteBin.Data.Repositories.Pastes;
+using Microsoft.EntityFrameworkCore;
 
 namespace PasteBin.Components
 {
@@ -17,7 +18,7 @@ namespace PasteBin.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var pastes = await this.pasteRepository.All().ToListAsync();
+            var pastes = await this.pasteRepository.All().OrderByDescending(paste => paste.CreatedOn).Take(5).ToListAsync();
 
             return this.View(pastes);
         }

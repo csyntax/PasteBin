@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +9,6 @@ using PasteBin.Data;
 using PasteBin.Models;
 using PasteBin.Services;
 using PasteBin.Data.Seeding;
-using PasteBin.Data.Repositories;
 using PasteBin.Data.Repositories.Pastes;
 using PasteBin.Data.Repositories.Languages;
 
@@ -66,23 +61,15 @@ namespace PasteBin
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            // Data
-            services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
+            // Data repositories and services
+            //services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
             services.AddScoped<IPasteRepository, PasteRepository>();
             services.AddScoped<ILanguageRepository, LanguageRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext dbContext)
         {
-            // Seed data on application startup
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-                ApplicationDbContextSeeder.Seed(dbContext);
-            }
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -109,6 +96,9 @@ namespace PasteBin
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // Seed data on application startup
+            ApplicationDbContextSeeder.Seed(dbContext);
         }
     }
 }

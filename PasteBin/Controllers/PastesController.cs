@@ -1,13 +1,16 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using PasteBin.Models;
 using PasteBin.Data.Repositories.Pastes;
 using PasteBin.Data.Repositories.Languages;
+using System.Linq;
 
 namespace PasteBin.Controllers
 {
+    [Authorize]
     public class PastesController : Controller
     {
         private readonly ILanguageRepository languageRepository;
@@ -23,15 +26,26 @@ namespace PasteBin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            var user = await this.userManager.GetUserAsync(User);
+            var pastes = await this.pasteRepository.All().Where(p => p.User == user).ToListAsync();
+
+            this.ViewData["Username"] = user.UserName;
+
+            return this.View(pastes);
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
             var paste = this.pasteRepository.Find(x => x.Id == id);
+
+            if (paste == null)
+            {
+                return this.NotFound();
+            }
 
             return this.View(paste);
         }
@@ -46,7 +60,7 @@ namespace PasteBin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Paste model)
+        public async Task<IActionResult> Create([FromForm] Paste model)
         {
             if (model != null && this.ModelState.IsValid)
             {
