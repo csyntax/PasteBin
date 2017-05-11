@@ -19,12 +19,12 @@ namespace PasteBin.Data.Repositories
 
         public IQueryable<TEntity> All()
         {
-            return this.GetQuery().AsQueryable();
+            return this.AddIncludes(this.dbSet).AsQueryable();
         }
 
         public TEntity Find(Expression<Func<TEntity, bool>> criteria)
         {
-            return this.GetQuery().Where(criteria).FirstOrDefault();
+            return this.All().Where(criteria).FirstOrDefault();
         }
 
         public void Add(TEntity entity)
@@ -51,11 +51,6 @@ namespace PasteBin.Data.Repositories
         protected virtual IQueryable<TEntity> AddIncludes(IQueryable<TEntity> queryable)
         {
             return queryable;
-        }
-
-        protected IQueryable<TEntity> GetQuery()
-        {
-            return this.AddIncludes(this.dbSet);
         }
     }
 }

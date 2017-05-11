@@ -18,7 +18,7 @@ namespace PasteBin.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var pastes = await this.pasteRepository.All().OrderByDescending(paste => paste.CreatedOn).Take(5).ToListAsync();
+            var pastes = await this.pasteRepository.All().Where(paste => paste.Private == false).OrderByDescending(paste => paste.CreatedOn).Take(5).ToListAsync();
 
             return this.View(pastes);
         }
