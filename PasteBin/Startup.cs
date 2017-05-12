@@ -16,6 +16,8 @@ namespace PasteBin
 {
     public class Startup
     {
+        private IConfigurationRoot Configuration { get; }
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -33,8 +35,6 @@ namespace PasteBin
 
             this.Configuration = builder.Build();
         }
-
-        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -57,18 +57,20 @@ namespace PasteBin
 
             services.AddMvc();
 
+            services.AddSingleton(this.Configuration);
+
+            // Data repositories and services
+            services.AddScoped<IPasteRepository, PasteRepository>();
+            services.AddScoped<ILanguageRepository, LanguageRepository>();
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-
-            // Data repositories and services
-            //services.AddScoped(typeof(IDbRepository<>), typeof(DbRepository<>));
-            services.AddScoped<IPasteRepository, PasteRepository>();
-            services.AddScoped<ILanguageRepository, LanguageRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
+            ILoggerFactory loggerFactory, ApplicationDbContext dbContext)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
