@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using PasteBin.Models;
 using PasteBin.Data.Repositories.Pastes;
 using PasteBin.Data.Repositories.Languages;
-using System.Linq;
 
 namespace PasteBin.Controllers
 {
@@ -29,7 +29,7 @@ namespace PasteBin.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await this.userManager.GetUserAsync(User);
-            var pastes = await this.pasteRepository.All().Where(p => p.User == user).ToListAsync();
+            var pastes = await this.pasteRepository.All().Where(p => p.User == user).OrderByDescending(p => p.CreatedOn).ToListAsync();
 
             this.ViewData["Username"] = user.UserName;
 
@@ -71,6 +71,7 @@ namespace PasteBin.Controllers
                 {
                     Title = model.Title,
                     Content = model.Content,
+                    Private = model.Private,
                     Language = language,
                     User = user
                 };

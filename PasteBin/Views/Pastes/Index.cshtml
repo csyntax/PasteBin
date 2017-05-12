@@ -6,13 +6,23 @@
 
 <header>
     <h4>Pastes by @ViewData["Username"]</h4>
-
+    <a asp-controller="Pastes" asp-action="Create">Create Paste!</a>
     <hr />
 </header>
 
-@foreach (var paste in Model)
-{
-    <div>
-        <h2>@paste.Title</h2>
-    </div>
-}
+<ul class="list-group">
+    @foreach (var paste in Model)
+    {
+        <li class="list-group-item">
+            <span class="badge">@paste.Language.Name</span>
+            <a asp-controller="Pastes" asp-action="Details" asp-route-id="@paste.Id">
+                @paste.Title
+            </a>
+            <div>@Html.DisplayFor(p => paste.CreatedOn)</div>
+            @if (paste.Private)
+            {
+                <div>Private paste</div>
+            }
+        </li>
+    }
+</ul>
