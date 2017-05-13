@@ -21,7 +21,9 @@
             <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         </environment>
 
-        <link href="~/lib/highlight/src/styles/arduino-light.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/prism.css" />
+
+        <script src="~/js/prism.js"></script>
 
         @Html.Raw(JavaScriptSnippet.FullScript)
     </head>
@@ -46,7 +48,9 @@
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li><a asp-area="" asp-controller="Pastes" asp-action="Index">My Pastes</a></li>
+                            <li>
+                                <a asp-area="" asp-controller="Pastes" asp-action="Index">My Pastes</a>
+                            </li>
                         }
                     </ul>
                     @await Html.PartialAsync("_LoginPartial")
@@ -90,15 +94,6 @@
             </script>
             <script src="~/js/site.min.js" asp-append-version="true"></script>
         </environment>
-
-        <script src="~/lib/highlight/src/highlight.js"></script>
-        <script>
-            $(document).ready(function () {
-                $("pre > code").each(function (n, t) {
-                    hljs.highlightBlock(t);
-                });
-            });
-        </script>
 
         @RenderSection("Scripts", required: false)
     </body>
