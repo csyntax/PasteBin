@@ -29,7 +29,11 @@ namespace PasteBin.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await this.userManager.GetUserAsync(User);
-            var pastes = await this.pasteRepository.All().Where(p => p.User == user).OrderByDescending(p => p.CreatedOn).ToListAsync();
+            var pastes = await this.pasteRepository
+                .All()
+                .Where(p => p.User == user)
+                .OrderByDescending(p => p.CreatedOn)
+                .ToListAsync();
 
             this.ViewData["Username"] = user.UserName;
 
@@ -60,7 +64,7 @@ namespace PasteBin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] Paste model)
+        public async Task<IActionResult> Create(Paste model)
         {
             if (model != null && this.ModelState.IsValid)
             {
@@ -78,7 +82,7 @@ namespace PasteBin.Controllers
 
                 this.pasteRepository.Add(paste);
 
-                return this.RedirectToAction("Details", new
+                return this.RedirectToAction(nameof(this.Details), new
                 {
                     id = paste.Id
                 });
