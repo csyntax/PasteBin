@@ -35,7 +35,7 @@ namespace PasteBin.Controllers
                 .OrderByDescending(p => p.CreatedOn)
                 .ToListAsync();
 
-            this.ViewData["Username"] = user.UserName;
+            this.ViewData["User"] = user;
 
             return this.View(pastes);
         }
