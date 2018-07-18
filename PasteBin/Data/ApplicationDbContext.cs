@@ -1,10 +1,9 @@
-﻿namespace PasteBin.Data
-{
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-   
-    using PasteBin.Models;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using PasteBin.Models;
 
+namespace PasteBin.Data
+{
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -18,9 +17,10 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            //builder.Entity<Paste>().HasOne<Language>().WithMany(c => c.Pastes).HasForeignKey(c => c.LanguageId);
-
             base.OnModelCreating(builder);
+            // Customize the ASP.NET Identity model and override the defaults if needed.
+            // For example, you can rename the ASP.NET Identity table names and more.
+            // Add your customizations after calling base.OnModelCreating(builder);
         }
     }
 }

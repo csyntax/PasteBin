@@ -1,0 +1,19 @@
+@model PasteBin.Models.Paste
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<header>
+    <h4>Paste: @Model.Title</h4>
+
+    <span class="label label-primary">Language: @Model.Language.Name</span>
+    <span class="label label-info">Created On: @Html.DisplayFor(model => model.CreatedOn)</span>
+    <span class="label label-info">Created By: @Model.User.UserName</span>
+    
+    <hr />
+</header>
+
+<main>
+    <pre class="language-@Model.Language.Tag"><code>@Model.Content</code></pre>
+</main>

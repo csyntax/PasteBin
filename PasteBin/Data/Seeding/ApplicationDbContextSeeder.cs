@@ -1,10 +1,9 @@
-﻿namespace PasteBin.Data.Seeding
+﻿using System.Linq;
+using System.Collections.Generic;
+using PasteBin.Models;
+
+namespace PasteBin.Data.Seeding
 {
-    using System.Linq;
-    using System.Collections.Generic;
-
-    using PasteBin.Models;
-
     public class ApplicationDbContextSeeder
     {
         public static void Seed(ApplicationDbContext dbContext)

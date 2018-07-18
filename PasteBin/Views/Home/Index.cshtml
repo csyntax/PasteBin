@@ -4,11 +4,11 @@
 
 <div class="jumbotron">
     <h1>PasteBin</h1>
-    <p>PasteBin application built with ASP.NET Core MVC.</p>
-
+    <p>PasteBin application created with ASP.NET Core MVC.</p>
+    
     @if (User.Identity.IsAuthenticated)
     {
-        <a asp-area="" asp-controller="Pastes" asp-action="Create" class="btn btn-success btn-lg">
+        <a asp-controller="Pastes" asp-action="Create" class="btn btn-success btn-lg">
             Create Paste!
         </a>
     }

@@ -1,26 +1,29 @@
-﻿namespace PasteBin.Components
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using PasteBin.Data.Repositories.Pastes;
+using Microsoft.EntityFrameworkCore;
+
+namespace PasteBin.Components
 {
-    using System.Linq;
-    using System.Threading.Tasks;
-
-    using Microsoft.AspNetCore.Mvc;
-
-    using PasteBin.Models;
-    using PasteBin.Data.Repositories;
-
-    [ViewComponent(Name="Sidebar")]
+    [ViewComponent(Name = "Sidebar")]
     public class SidebarComponent : ViewComponent
     {
-        private readonly IEfRepository<Paste> pasteRepository;
+        private readonly IPasteRepository pasteRepository;
 
-        public SidebarComponent(IEfRepository<Paste> pasteRepository)
+        public SidebarComponent(IPasteRepository pasteRepository)
         {
             this.pasteRepository = pasteRepository;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var pastes = this.pasteRepository.All().OrderByDescending(p => p.CreatedOn).Take(5).ToList();
+            var pastes = await this.pasteRepository
+                .All()
+                .Where(paste => paste.Private == false)
+                .OrderByDescending(paste => paste.CreatedOn)
+                .Take(5)
+                .ToListAsync();
 
             return this.View(pastes);
         }

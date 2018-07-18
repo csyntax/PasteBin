@@ -1,9 +1,7 @@
-﻿namespace PasteBin.Controllers
-{
-    using System.Diagnostics;
-    using Microsoft.AspNetCore.Mvc;
-    using PasteBin.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
 
+namespace PasteBin.Controllers
+{
     public class HomeController : Controller
     {
         [HttpGet]
@@ -14,12 +12,7 @@
 
         public IActionResult Error()
         {
-            var model = new ErrorViewModel
-            {
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-            };
-
-            return this.View(model);
+            return this.View();
         }
     }
 }
