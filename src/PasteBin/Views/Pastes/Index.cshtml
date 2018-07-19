@@ -1,0 +1,23 @@
+﻿@model IEnumerable<PasteBin.ViewModels.Pastes.PasteViewModel>
+
+@{
+    ViewData["Title"] = "Pastes";
+}
+
+<header>
+    <a asp-controller="Pastes" asp-action="Create">Create Paste!</a>
+    <hr />
+</header>
+
+<ul class="list-group">
+    @foreach (var paste in Model)
+    {
+        <li class="list-group-item">
+            <span class="badge">@paste.Language</span>
+            <a asp-controller="Pastes" asp-action="View" asp-route-id="@paste.Id">
+                @paste.Title
+            </a>
+            <div>@Html.DisplayFor(p => paste.Date)</div>
+        </li>
+    }
+</ul>

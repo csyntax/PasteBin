@@ -13,6 +13,7 @@ using PasteBin.Models;
 using PasteBin.Services;
 using PasteBin.Config.Mapping;
 using PasteBin.Data.Repositories;
+using PasteBin.Data.Seeding;
 
 namespace PasteBin
 {
@@ -54,6 +55,13 @@ namespace PasteBin
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             AutoMapperConfig.RegisterMappings();
+
+            using (var serviceScope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                ApplicationDbContextSeeder.Seed(dbContext);
+            }
 
             if (env.IsDevelopment())
             {
