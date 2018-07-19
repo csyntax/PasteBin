@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using PasteBin.Data;
 using PasteBin.Models;
 using PasteBin.Services;
+using PasteBin.Config.Mapping;
+using PasteBin.Data.Repositories;
 
 namespace PasteBin
 {
@@ -29,11 +31,20 @@ namespace PasteBin
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                    options =>
+                    {
+                        options.Password.RequireDigit = false;
+                        options.Password.RequireLowercase = false;
+                        options.Password.RequireUppercase = false;
+                        options.Password.RequireNonAlphanumeric = false;
+                        options.Password.RequiredLength = 6;
+                    })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Add application services.
+            services.AddScoped(typeof(IEfRepository<>), typeof(EfRepository<>));
+
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
@@ -42,6 +53,8 @@ namespace PasteBin
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            AutoMapperConfig.RegisterMappings();
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();

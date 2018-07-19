@@ -6,8 +6,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PasteBin.Models
 {
-    // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser()
+        {
+            this.Pastes = new HashSet<Paste>();
+        }
+
+        public ICollection<Paste> Pastes { get; set; }
     }
 }

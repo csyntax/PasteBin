@@ -15,6 +15,10 @@ namespace PasteBin.Data
         {
         }
 
+        public DbSet<Language> Languages { get; set; }
+
+        public DbSet<Paste> Pastes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
