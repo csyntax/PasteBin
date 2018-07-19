@@ -4,7 +4,11 @@
     ViewData["Title"] = "View";
 }
 
-<h2>@Model.Title</h2>
-<h3>@Model.Language</h3>
+<div class="callout">
+    <h4>@Model.Title</h4>
+    <span class="text-warning">~@Model.Bytes KB <strong>@Model.Language</strong></span>
+    <p><time>@Model.Date</time></p>
+   
+</div>
 
-<pre>@Model.Content</pre>
+<pre class="language-@Model.Tag"><code>@Model.Content</code></pre>

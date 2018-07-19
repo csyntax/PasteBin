@@ -1,6 +1,4 @@
-using System;
-
-namespace PasteBin.Models
+namespace PasteBin.ViewModels
 {
     public class ErrorViewModel
     {

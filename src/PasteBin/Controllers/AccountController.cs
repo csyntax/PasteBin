@@ -11,8 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PasteBin.Models;
-using PasteBin.Models.AccountViewModels;
 using PasteBin.Services;
+using PasteBin.ViewModels.Accounts;
 
 namespace PasteBin.Controllers
 {

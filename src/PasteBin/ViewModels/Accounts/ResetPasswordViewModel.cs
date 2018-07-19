@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PasteBin.Models.AccountViewModels
+namespace PasteBin.ViewModels.Accounts
 {
     public class ResetPasswordViewModel
     {

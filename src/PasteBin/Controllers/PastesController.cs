@@ -1,16 +1,19 @@
 ﻿namespace PasteBin.Controllers
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;    
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Authorization;
 
     using PasteBin.Models;
     using PasteBin.Data.Repositories;
-    using System.Linq;
     using PasteBin.ViewModels.Pastes;
     using PasteBin.Extensions;
-    using System.Threading.Tasks;
+    
 
+    [Authorize]
     public class PastesController : Controller
     {
         private readonly IEfRepository<Paste> pasteRepository;
@@ -71,7 +74,10 @@
                 this.pasteRepository.Add(paste);
                 this.pasteRepository.SaveChanges();
 
-                return this.RedirectToAction(nameof(this.Index));
+                return this.RedirectToAction(nameof(this.View), new
+                {
+                    id = paste.Id
+                });
             }
 
             this.ViewData["Languages"] = this.languageRepository.All().ToList();

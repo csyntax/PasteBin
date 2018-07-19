@@ -1,0 +1,15 @@
+﻿@model IEnumerable<PasteBin.ViewModels.Pastes.PasteViewModel>
+
+<ul class="list-group table-of-contents">
+    @foreach (var paste in Model)
+    {
+        <li class="list-group-item">
+            <p>
+                <a asp-controller="Pastes" asp-action="View" asp-route-id="@paste.Id">@paste.Title</a>
+                <span class="badge pull-right">@paste.Language</span>
+            </p>
+            <p class="text-success">@paste.User</p>
+            <p><time>@paste.Date</time></p>
+        </li>
+    }
+</ul>
