@@ -38,6 +38,7 @@
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult View(int id)
         {
             var paste = this.pasteRepository.All().To<PasteViewModel>().Where(p => p.Id == id).FirstOrDefault();

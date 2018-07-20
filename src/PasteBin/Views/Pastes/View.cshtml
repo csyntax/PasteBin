@@ -6,7 +6,7 @@
 
 <div class="callout">
     <h4>@Model.Title</h4>
-    <span class="text-warning">~@Model.Bytes KB <strong>@Model.Language</strong></span>
+    <span class="text-warning">~@string.Format("{0:0.00}", Model.Bytes)KB <strong>@Model.Language</strong></span>
     <p><time>@Model.Date</time></p>
    
 </div>
