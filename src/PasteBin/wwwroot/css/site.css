@@ -10,6 +10,10 @@
     border: none;
 }
 
+    .navbar .btn:not(.navbar-btn) {
+        margin: 0 0.5em;
+    }
+
     .navbar .navbar-brand {
         color: rgb(255, 255, 255);
         font-size: 1.15em;
@@ -40,4 +44,18 @@
 
 time {
     font-style: italic;
+}
+
+.jumbotron {
+    text-align: center;
+}
+
+.jumbotron > h1 {
+    font-size: 4.5em;
+    font-weight: 800;
+}
+
+.jumbotron > p {
+    font-weight: 700;
+    line-height: 1.5;
 }

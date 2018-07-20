@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using PasteBin.Models;
-using PasteBin.Models.ManageViewModels;
-using PasteBin.Services;
-
-namespace PasteBin.Controllers
+﻿namespace PasteBin.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+
+    using PasteBin.Models;
+    using PasteBin.Services;
+    using PasteBin.ViewModels.Manage;
+
     [Authorize]
     [Route("[controller]/[action]")]
     public class ManageController : Controller

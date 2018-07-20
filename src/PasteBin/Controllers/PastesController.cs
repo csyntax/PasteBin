@@ -8,11 +8,10 @@
     using Microsoft.AspNetCore.Authorization;
 
     using PasteBin.Models;
+    using PasteBin.Extensions;
     using PasteBin.Data.Repositories;
     using PasteBin.ViewModels.Pastes;
-    using PasteBin.Extensions;
     
-
     [Authorize]
     public class PastesController : Controller
     {
@@ -83,6 +82,15 @@
             this.ViewData["Languages"] = this.languageRepository.All().ToList();
 
             return this.View(model);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.pasteRepository.Dispose();
+                this.languageRepository.Dispose();
+            }
         }
     }
 }

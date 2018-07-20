@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using PasteBin.Models;
-using PasteBin.Services;
-using PasteBin.ViewModels.Accounts;
-
-namespace PasteBin.Controllers
+﻿namespace PasteBin.Controllers
 {
+    using System;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+   
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Authentication;
+
+    using PasteBin.Models;
+    using PasteBin.Services;
+    using PasteBin.ViewModels.Accounts;
+
     [Authorize]
     [Route("[controller]/[action]")]
     public class AccountController : Controller

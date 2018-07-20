@@ -5,16 +5,18 @@
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Caching.Memory;
 
     using PasteBin.Models;
+    using PasteBin.Extensions;
     using PasteBin.Data.Repositories;
     using PasteBin.ViewModels.Pastes;
-    using PasteBin.Extensions;
-    
+
     [ViewComponent(Name = "Sidebar")]
     public class SidebarComponent : ViewComponent
     {
         private readonly IEfRepository<Paste> pasteRepository;
+        private readonly IMemoryCache memoryCache;
 
         public SidebarComponent(IEfRepository<Paste> pasteRepository)
         {

@@ -1,7 +1,6 @@
 ﻿namespace PasteBin.ViewModels.Pastes
 {
     using System;
-    using System.Text;
     using AutoMapper;
 
     using PasteBin.Models;

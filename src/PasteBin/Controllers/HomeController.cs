@@ -1,7 +1,9 @@
 ﻿namespace PasteBin.Controllers
 {
     using System.Diagnostics;
+
     using Microsoft.AspNetCore.Mvc;
+
     using PasteBin.ViewModels;
 
     public class HomeController : Controller
