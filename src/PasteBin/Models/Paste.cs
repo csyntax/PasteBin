@@ -25,7 +25,6 @@
         public string Content { get; set; }
 
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd MMMM yyyy}")]
         public DateTime Date { get; set; }
 
         public bool IsPrivate { get; set; }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-
-namespace PasteBin.Models
+﻿namespace PasteBin.Models
 {
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Identity;
+
     public class ApplicationUser : IdentityUser
     {
         public ApplicationUser()

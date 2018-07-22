@@ -1,6 +1,8 @@
 ﻿namespace PasteBin.ViewModels.Pastes
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
+
     using AutoMapper;
 
     using PasteBin.Models;
@@ -22,6 +24,7 @@
 
         public double Bytes {get; set;}
 
+        [DisplayFormat(DataFormatString = "{0:dd MMMM yyyy}")]
         public DateTime Date { get; set; }
 
         public void CreateMappings(IMapperConfigurationExpression config)

@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>aspnet-PasteBin-B5CAA610-2150-4460-A10A-2DED7EE71352</UserSecretsId>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
