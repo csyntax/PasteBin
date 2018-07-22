@@ -12,7 +12,6 @@
     using PasteBin.Extensions;
     using PasteBin.Data.Repositories;
     using PasteBin.ViewModels.Pastes;
-    
 
     [Authorize]
     public class PastesController : Controller
@@ -34,7 +33,11 @@
         [HttpGet]
         public IActionResult Index()
         {
-            var pastes = this.pasteRepository.All().OrderByDescending(p => p.Date).To<PasteViewModel>().ToList();
+            var pastes = this.pasteRepository
+                .All()
+                .OrderByDescending(p => p.Date)
+                .To<PasteViewModel>()
+                .ToList();
 
             return this.View(pastes);
         }
@@ -43,7 +46,11 @@
         [AllowAnonymous]
         public IActionResult View(int id)
         {
-            var paste = this.pasteRepository.All().To<PasteViewModel>().Where(p => p.Id == id).FirstOrDefault();
+            var paste = this.pasteRepository
+                .All()
+                .To<PasteViewModel>()
+                .Where(p => p.Id == id)
+                .FirstOrDefault();
 
             return this.View(paste);
         }
@@ -82,7 +89,7 @@
                 });
             }
 
-            this.ViewData["Languages"] = this.languageRepository.All().ToList();
+            this.ViewData["Languages"] = this.languageRepository.All().To<LanguageViewModel>().ToList();
 
             return this.View(model);
         }
@@ -93,6 +100,7 @@
             {
                 this.pasteRepository.Dispose();
                 this.languageRepository.Dispose();
+                this.userManager.Dispose();
             }
         }
     }

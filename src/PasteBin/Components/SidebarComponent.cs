@@ -11,6 +11,9 @@
     using PasteBin.Extensions;
     using PasteBin.Data.Repositories;
     using PasteBin.ViewModels.Pastes;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
 
     [ViewComponent(Name = "Sidebar")]
     public class SidebarComponent : ViewComponent
@@ -34,7 +37,12 @@
                 .To<PasteViewModel>()
                 .ToListAsync();
 
-            return this.View(pastes);
+            var cacheEntry = this.memoryCache.GetOrCreate<ICollection<PasteViewModel>>(nameof(pastes), entry =>
+            {
+                return pastes;
+            });
+
+            return this.View(cacheEntry);
         }
     }
 }
