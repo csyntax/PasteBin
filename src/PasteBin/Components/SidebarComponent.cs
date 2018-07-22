@@ -19,7 +19,9 @@
         private readonly IEfRepository<Paste> pasteRepository;
         private readonly IMemoryCache memoryCache;
 
-        public SidebarComponent(IEfRepository<Paste> pasteRepository, IMemoryCache memoryCache)
+        public SidebarComponent(
+            IEfRepository<Paste> pasteRepository, 
+            IMemoryCache memoryCache)
         {
             this.pasteRepository = pasteRepository;
             this.memoryCache = memoryCache;

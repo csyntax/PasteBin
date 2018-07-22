@@ -1,14 +1,16 @@
 ﻿namespace PasteBin.Config.Mapping
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Collections.Generic;
 
     using AutoMapper;
 
     public static class AutoMapperConfig
     {
+        public static IConfigurationProvider MapperConfiguration { get; private set; }
+
         public static void RegisterMappings()
         {
             var types = Assembly.GetExecutingAssembly().GetExportedTypes();
