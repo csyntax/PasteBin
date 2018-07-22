@@ -48,8 +48,21 @@
         {
             var paste = this.pasteRepository
                 .All()
-                .To<PasteViewModel>()
                 .Where(p => p.Id == id)
+                .To<PasteViewModel>()
+                .FirstOrDefault();
+
+            return this.View(paste);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Embedded(int id)
+        {
+            var paste = this.pasteRepository
+                .All()
+                .Where(p => p.Id == id)
+                .To<PasteEmbeddedViewModel>()
                 .FirstOrDefault();
 
             return this.View(paste);
@@ -58,7 +71,11 @@
         [HttpGet]
         public IActionResult Create()
         {
-            this.ViewData["Languages"] = this.languageRepository.All().To<LanguageViewModel>().ToList();
+            this.ViewData["Languages"] = this.languageRepository
+                .All()
+                .OrderBy(p => p.Name)
+                .To<LanguageViewModel>()
+                .ToList();
 
             return this.View();
         }

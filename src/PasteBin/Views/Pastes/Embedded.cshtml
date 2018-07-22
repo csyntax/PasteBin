@@ -1,0 +1,11 @@
+﻿@model PasteBin.ViewModels.Pastes.PasteEmbeddedViewModel
+
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/css/prism.css" />
+
+<pre class="language-@Model.Tag"><code>@Model.Content</code></pre>
+
+<script src="~/js/prism.js"></script>

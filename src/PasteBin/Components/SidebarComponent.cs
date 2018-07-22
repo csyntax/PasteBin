@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -11,9 +12,6 @@
     using PasteBin.Extensions;
     using PasteBin.Data.Repositories;
     using PasteBin.ViewModels.Pastes;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
 
     [ViewComponent(Name = "Sidebar")]
     public class SidebarComponent : ViewComponent
