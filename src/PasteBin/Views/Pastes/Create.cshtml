@@ -1,7 +1,7 @@
 ﻿@model PasteBin.Models.Paste
 
 @{
-    ViewData["Title"] = "Create paste";
+    ViewData["Title"] = "Create Paste";
 }
 
 <form asp-controller="Pastes" asp-action="Create" method="POST">
@@ -21,7 +21,7 @@
 
     <div class="form-group">
         <label asp-for="Language" class="control-label">Language</label>
-        <select class="form-control" asp-for="LanguageId" asp-items="@(new SelectList(ViewBag.Languages, "Id", "Name"))">
+        <select class="form-control" asp-for="LanguageId" asp-items="@(new SelectList(this.ViewData["Languages"] as IEnumerable<PasteBin.ViewModels.LanguageViewModel>, "Id", "Name"))">
             <option value="0">Please Select..</option>
         </select>
         <span asp-validation-for="LanguageId" class="text-danger"></span>

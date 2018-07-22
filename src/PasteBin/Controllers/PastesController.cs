@@ -8,10 +8,12 @@
     using Microsoft.AspNetCore.Authorization;
 
     using PasteBin.Models;
+    using PasteBin.ViewModels;
     using PasteBin.Extensions;
     using PasteBin.Data.Repositories;
     using PasteBin.ViewModels.Pastes;
     
+
     [Authorize]
     public class PastesController : Controller
     {
@@ -49,7 +51,7 @@
         [HttpGet]
         public IActionResult Create()
         {
-            this.ViewData["Languages"] = this.languageRepository.All().ToList();
+            this.ViewData["Languages"] = this.languageRepository.All().To<LanguageViewModel>().ToList();
 
             return this.View();
         }

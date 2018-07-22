@@ -6,7 +6,7 @@
         <li class="list-group-item">
             <p>
                 <a asp-controller="Pastes" asp-action="View" asp-route-id="@paste.Id">@paste.Title</a>
-                <span class="badge pull-right">@paste.Language</span>
+                <span class="badge pull-right">@paste.Language.Name</span>
             </p>
             <p class="text-success">@paste.User</p>
             <p><time>@paste.Date</time></p>

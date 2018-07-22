@@ -13,7 +13,7 @@
     @foreach (var paste in Model)
     {
         <li class="list-group-item">
-            <span class="badge">@paste.Language</span>
+            <span class="badge">@paste.Language.Name</span>
             <a asp-controller="Pastes" asp-action="View" asp-route-id="@paste.Id">
                 @paste.Title
             </a>
