@@ -15,7 +15,6 @@
     using PasteBin.Data.Seeding;
     using PasteBin.Config.Mapping;
     using PasteBin.Data.Repositories;
-    using AutoMapper;
 
     public class Startup
     {
@@ -47,7 +46,7 @@
             services.AddMemoryCache();
             services.AddResponseCompression();
 
-            services.AddSingleton<IConfiguration>(this.configuration);
+            services.AddSingleton(this.configuration);
 
             services.AddScoped(typeof(IEfRepository<>), typeof(EfRepository<>));
 
