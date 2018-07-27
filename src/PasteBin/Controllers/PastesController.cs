@@ -1,5 +1,6 @@
 ﻿namespace PasteBin.Controllers
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -12,6 +13,8 @@
     using PasteBin.Extensions;
     using PasteBin.Data.Repositories;
     using PasteBin.ViewModels.Pastes;
+    
+    // Validates and security
 
     [Authorize]
     public class PastesController : Controller
@@ -19,6 +22,8 @@
         private readonly IEfRepository<Paste> pasteRepository;
         private readonly IEfRepository<Language> languageRepository;
         private readonly UserManager<ApplicationUser> userManager;
+
+        private const int MinutesBetweenPastes = 10;
 
         public PastesController(
             IEfRepository<Paste> pasteRepository,
@@ -106,9 +111,30 @@
                 });
             }
 
-            this.ViewData["Languages"] = this.languageRepository.All().To<LanguageViewModel>().ToList();
+            this.ViewData["Languages"] = this.languageRepository
+               .All()
+               .OrderBy(p => p.Name)
+               .To<LanguageViewModel>()
+               .ToList();
 
             return this.View(model);
+        }
+
+        private bool IsUserCommitedPasteInLastMinute()
+        {
+            var userId = this.userManager.GetUserId(User);
+            var lastCommit = this.pasteRepository
+                .All()
+                .Where(p => p.UserId == userId)
+                .OrderByDescending(p => p.Date)
+                .FirstOrDefault();
+
+            if (lastCommit == null)
+            {
+                return false;
+            }
+
+            return lastCommit.Date.AddMinutes(MinutesBetweenPastes) >= DateTime.Now;
         }
 
         protected override void Dispose(bool disposing)
