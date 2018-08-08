@@ -89,6 +89,11 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Paste model)
         {
+            if (this.IsUserCommitedPasteInLastMinute())
+            {
+                return this.Json(string.Format($"You can commit every {MinutesBetweenPastes} minutes"));
+            }
+
             if (model != null && this.ModelState.IsValid)
             {
                 var user = await this.userManager.GetUserAsync(User);
