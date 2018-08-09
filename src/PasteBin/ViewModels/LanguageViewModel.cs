@@ -3,7 +3,7 @@
     using PasteBin.Models;
     using PasteBin.Config.Mapping;
 
-    public class LanguageViewModel: IMapFrom<Language>
+    public class LanguageViewModel : IMapFrom<Language>
     {
         public int Id { get; set; }
 
