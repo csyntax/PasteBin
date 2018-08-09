@@ -13,8 +13,9 @@
     using PasteBin.Extensions;
     using PasteBin.Data.Repositories;
     using PasteBin.ViewModels.Pastes;
-    
-    // Validates and security
+
+    using Microsoft.Extensions.Caching.Memory;
+    using System.Collections.Generic;
 
     [Authorize]
     public class PastesController : Controller
@@ -22,17 +23,20 @@
         private readonly IEfRepository<Paste> pasteRepository;
         private readonly IEfRepository<Language> languageRepository;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IMemoryCache cache;
 
         private const int MinutesBetweenPastes = 10;
 
         public PastesController(
             IEfRepository<Paste> pasteRepository,
             IEfRepository<Language> languageRepository,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IMemoryCache cache)
         {
             this.pasteRepository = pasteRepository;
             this.languageRepository = languageRepository;
             this.userManager = userManager;
+            this.cache = cache;
         }
 
         [HttpGet]
@@ -76,11 +80,7 @@
         [HttpGet]
         public IActionResult Create()
         {
-            this.ViewData["Languages"] = this.languageRepository
-                .All()
-                .OrderBy(p => p.Name)
-                .To<LanguageViewModel>()
-                .ToList();
+            this.GetLanguages();
 
             return this.View();
         }
@@ -89,9 +89,13 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Paste model)
         {
+            this.GetLanguages();
+
             if (this.IsUserCommitedPasteInLastMinute())
             {
-                return this.Json(string.Format($"You can commit every {MinutesBetweenPastes} minutes"));
+                this.ViewData["Message"] = $"You can commit every {MinutesBetweenPastes} minutes";
+
+                return this.View(model);
             }
 
             if (model != null && this.ModelState.IsValid)
@@ -116,12 +120,6 @@
                 });
             }
 
-            this.ViewData["Languages"] = this.languageRepository
-               .All()
-               .OrderBy(p => p.Name)
-               .To<LanguageViewModel>()
-               .ToList();
-
             return this.View(model);
         }
 
@@ -140,6 +138,22 @@
             }
 
             return lastCommit.Date.AddMinutes(MinutesBetweenPastes) >= DateTime.Now;
+        }
+
+        private void GetLanguages()
+        {
+            if (!this.cache.TryGetValue("languages", out List<LanguageViewModel> cacheEntry))
+            {
+                cacheEntry = this.languageRepository
+                    .All()
+                    .OrderBy(p => p.Name)
+                    .To<LanguageViewModel>()
+                    .ToList();
+
+                this.cache.Set("languages", cacheEntry);
+            }
+
+            this.ViewData["Languages"] = cacheEntry;
         }
 
         protected override void Dispose(bool disposing)

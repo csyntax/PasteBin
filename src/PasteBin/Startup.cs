@@ -15,6 +15,7 @@
     using PasteBin.Data.Seeding;
     using PasteBin.Config.Mapping;
     using PasteBin.Data.Repositories;
+    using System;
 
     public class Startup
     {
@@ -31,20 +32,30 @@
                 options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(
-               options =>
-               {
-                   options.Password.RequireDigit = false;
-                   options.Password.RequireLowercase = false;
-                   options.Password.RequireUppercase = false;
-                   options.Password.RequireNonAlphanumeric = false;
-                   options.Password.RequiredLength = 6;
-               })
-               .AddEntityFrameworkStores<ApplicationDbContext>()
-               .AddDefaultTokenProviders();
+                options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = 6;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Account/Login";
+                options.SlidingExpiration = true;
+            });
+
             services.AddMemoryCache();
             services.AddResponseCompression();
+
+            services.AddMvc();
 
             services.AddSingleton(this.configuration);
 
@@ -78,10 +89,9 @@
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseResponseCompression();
-
             app.UseStaticFiles();
-
+            app.UseResponseCompression();
+            app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseMvc(routes =>
