@@ -3,38 +3,44 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Authorization;
 
-    using PasteBin.Models;
-    using PasteBin.ViewModels;
-    using PasteBin.Extensions;
-    using PasteBin.Data.Repositories;
-    using PasteBin.ViewModels.Pastes;
-
     using Microsoft.Extensions.Caching.Memory;
-    using System.Collections.Generic;
+
+    using PasteBin.Services.Web.Mapping;
+    using PasteBin.Data.Models;
+    using PasteBin.Services.Data.Pastes;
+    using PasteBin.Services.Data.Languages;
+    using PasteBin.Web.Infrastructure.ViewModels.Pastes;
+    using PasteBin.Web.Infrastructure.InputModels;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
 
     [Authorize]
     public class PastesController : Controller
     {
-        private readonly IEfRepository<Paste> pasteRepository;
-        private readonly IEfRepository<Language> languageRepository;
+        private readonly IPasteService pastes;
+        private readonly ILanguageService languages;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IMemoryCache cache;
+        private readonly IMappingService mapping;
 
         private const int MinutesBetweenPastes = 10;
 
         public PastesController(
-            IEfRepository<Paste> pasteRepository,
-            IEfRepository<Language> languageRepository,
+            IPasteService pastes,
+            ILanguageService languages,
             UserManager<ApplicationUser> userManager,
+            IMappingService mapping,
             IMemoryCache cache)
         {
-            this.pasteRepository = pasteRepository;
-            this.languageRepository = languageRepository;
+            this.pastes = pastes;
+            this.languages = languages;
+            this.mapping = mapping;
             this.userManager = userManager;
             this.cache = cache;
         }
@@ -42,54 +48,59 @@
         [HttpGet]
         public IActionResult Index()
         {
-            var pastes = this.pasteRepository
-                .All()
-                .OrderByDescending(p => p.Date)
-                .To<PasteViewModel>()
-                .ToList();
+            var pastes = this.pastes.GetAll();
+            var model = this.mapping.Map<PasteViewModel>(pastes).ToList();
 
-            return this.View(pastes);
+            return this.View(model);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
+       [HttpGet]
+       [AllowAnonymous]
         public IActionResult View(int id)
         {
-            var paste = this.pasteRepository
-                .All()
-                .Where(p => p.Id == id)
-                .To<PasteViewModel>()
-                .FirstOrDefault();
+            var paste = this.pastes.GetAll().Where(x => x.Id == id);
+            var model = this.mapping.Map<PasteViewModel>(paste).FirstOrDefault();
 
-            return this.View(paste);
+            return this.View(model);
         }
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Embedded(int id)
         {
-            var paste = this.pasteRepository
-                .All()
-                .Where(p => p.Id == id)
-                .To<PasteEmbeddedViewModel>()
-                .FirstOrDefault();
+            var paste = this.pastes.GetAll().Where(x => x.Id == id);
+            var model = this.mapping.Map<PasteEmbeddedViewModel>(paste).FirstOrDefault();
 
-            return this.View(paste);
+            return this.View(model);
         }
-
+        
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            this.GetLanguages();
+            var model = new PasteInputModel();
 
-            return this.View();
+            model.Languages = await this.languages.Get()
+                          .Select(lang => new SelectListItem()
+                          {
+                              Value = lang.Id.ToString(),
+                              Text = lang.Name
+                          })
+                          .ToListAsync();
+
+            return this.View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Paste model)
+        public async Task<IActionResult> Create(PasteInputModel model)
         {
-            this.GetLanguages();
+            model.Languages = await this.languages.Get()
+                         .Select(lang => new SelectListItem()
+                         {
+                             Value = lang.Id.ToString(),
+                             Text = lang.Name
+                         })
+                         .ToListAsync();
 
             if (this.IsUserCommitedPasteInLastMinute())
             {
@@ -101,7 +112,7 @@
             if (model != null && this.ModelState.IsValid)
             {
                 var user = await this.userManager.GetUserAsync(User);
-                var language = this.languageRepository.Get(model.LanguageId);
+                var language = this.languages.Get(model.Language);
 
                 var paste = new Paste
                 {
@@ -111,8 +122,7 @@
                     User = user
                 };
 
-                this.pasteRepository.Add(paste);
-                this.pasteRepository.SaveChanges();
+                this.pastes.Add(paste);
 
                 return this.RedirectToAction(nameof(this.View), new
                 {
@@ -126,8 +136,8 @@
         private bool IsUserCommitedPasteInLastMinute()
         {
             var userId = this.userManager.GetUserId(User);
-            var lastCommit = this.pasteRepository
-                .All()
+            var lastCommit = this.pastes
+                .GetAll()
                 .Where(p => p.UserId == userId)
                 .OrderByDescending(p => p.Date)
                 .FirstOrDefault();
@@ -144,11 +154,9 @@
         {
             if (!this.cache.TryGetValue("languages", out List<LanguageViewModel> cacheEntry))
             {
-                cacheEntry = this.languageRepository
-                    .All()
-                    .OrderBy(p => p.Name)
-                    .To<LanguageViewModel>()
-                    .ToList();
+                var languages = this.languages.Get();
+
+                cacheEntry = this.mapping.Map<LanguageViewModel>(languages).ToList();
 
                 this.cache.Set("languages", cacheEntry);
             }
@@ -160,8 +168,8 @@
         {
             if (disposing)
             {
-                this.pasteRepository.Dispose();
-                this.languageRepository.Dispose();
+                this.pastes.Dispose();
+                this.languages.Dispose();
                 this.userManager.Dispose();
             }
         }

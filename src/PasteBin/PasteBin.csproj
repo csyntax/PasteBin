@@ -6,15 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
 
- <!-- <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
-    <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.2" />
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
-  </ItemGroup>-->
+  <ItemGroup>
+    <ProjectReference Include="..\Data\PasteBin.Data.Models\PasteBin.Data.Models.csproj" />
+    <ProjectReference Include="..\Data\PasteBin.Data\PasteBin.Data.csproj" />
+    <ProjectReference Include="..\Services\PasteBin.Services.Data\PasteBin.Services.Data.csproj" />
+    <ProjectReference Include="..\Services\PasteBin.Services.Web\PasteBin.Services.Web.csproj" />
+    <ProjectReference Include="..\Web\PasteBin.Web.Infrastructure\PasteBin.Web.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>

@@ -1,45 +1,41 @@
 ﻿namespace PasteBin.Components
 {
-    using System.Linq;
     using System.Threading.Tasks;
     using System.Collections.Generic;
 
     using Microsoft.AspNetCore.Mvc;
+
     using Microsoft.EntityFrameworkCore;
+    
     using Microsoft.Extensions.Caching.Memory;
 
-    using PasteBin.Models;
-    using PasteBin.Extensions;
-    using PasteBin.Data.Repositories;
-    using PasteBin.ViewModels.Pastes;
+    using Services.Data.Pastes;
+    using Services.Web.Mapping;
+
+    using Web.Infrastructure.ViewModels.Pastes;
 
     [ViewComponent(Name = "Sidebar")]
     public class SidebarComponent : ViewComponent
     {
-        private readonly IEfRepository<Paste> pasteRepository;
-        private readonly IMemoryCache memoryCache;
-
-        public SidebarComponent(
-            IEfRepository<Paste> pasteRepository, 
-            IMemoryCache memoryCache)
-        {
-            this.pasteRepository = pasteRepository;
-            this.memoryCache = memoryCache;
+        private readonly IMemoryCache cache;
+        private readonly IMappingService mapper;
+        private readonly IPasteService pastes;
+        
+        public SidebarComponent(IMappingService mapper, IMemoryCache cache, IPasteService pastes)
+        {   
+            this.cache = cache;
+            this.mapper = mapper;
+            this.pastes = pastes;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var pastes = await this.pasteRepository
-                .All()
-                .Where(p => p.IsPrivate == false)
-                .OrderByDescending(p => p.Date)
-                .Take(5)
-                .To<PasteViewModel>()
-                .ToListAsync();
-
-            var cacheEntry = this.memoryCache.GetOrCreate<ICollection<PasteViewModel>>(nameof(pastes), entry =>
+            var cacheEntry = await this.cache.GetOrCreateAsync<List<PasteViewModel>>("Pastes", async entry =>
             {
-                return pastes;
+                var pastes = this.pastes.GetAll();
+                var model = await this.mapper.Map<PasteViewModel>(pastes).ToListAsync();
+
+                return model;
             });
 
             return this.View(cacheEntry);

@@ -1,12 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    this.ViewData["Title"] = "Home";
 }
 
 <section class="jumbotron">
     <h1>PasteBin</h1>
     <p>PasteBin application built with ASP.NET Core and SQL Server.</p>
 
-    @if (User.Identity.IsAuthenticated)
+    @if (this.User.Identity.IsAuthenticated)
     {
         <a asp-controller="Pastes" asp-action="Create" class="btn btn-success btn-lg">
             Create Paste!

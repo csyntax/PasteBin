@@ -1,5 +1,7 @@
 ﻿namespace PasteBin
 {
+    using System;
+
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
@@ -9,13 +11,17 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
-    using PasteBin.Data;
-    using PasteBin.Models;
-    using PasteBin.Services;
-    using PasteBin.Data.Seeding;
-    using PasteBin.Config.Mapping;
-    using PasteBin.Data.Repositories;
-    using System;
+    using Data;
+    using Data.Models;
+    using Data.Seeding;
+    using Data.Repositories;
+
+    using Services.Web;
+    using Services.Web.Mapping;
+    using Services.Data.Languages;
+    using Services.Data.Pastes;
+
+    using Web.Infrastructure.Extensions;
 
     public class Startup
     {
@@ -28,11 +34,18 @@
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+            services
+                .AddScoped<IApplicationDbContext>(p => p.GetService<ApplicationDbContext>())
+                .AddDbContextPool<ApplicationDbContext>(options =>
+                {
+                    var assembly = typeof(ApplicationDbContext).Assembly.FullName;
+                    var connectionString = this.configuration.GetConnectionString("DefaultConnection");
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(
-                options =>
+                    options.UseSqlServer(connectionString, c => c.MigrationsAssembly(assembly));
+                });
+
+            services
+                .AddIdentity<ApplicationUser, ApplicationRole>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
@@ -41,6 +54,8 @@
                     options.Password.RequiredLength = 6;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserStore<ApplicationUserStore>()
+                .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
@@ -56,27 +71,32 @@
             services.AddResponseCompression();
 
             services.AddMvc();
+            services.AddAutoMapper();
 
-            services.AddSingleton(this.configuration);
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
+            services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();
 
             services.AddScoped(typeof(IEfRepository<>), typeof(EfRepository<>));
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IMappingService, MappingService>();
+            services.AddScoped<IPasteService, PasteService>();
+            services.AddScoped<ILanguageService, LanguageService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            AutoMapperConfig.RegisterMappings();
-
+        { 
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
+                var langRepo = serviceScope.ServiceProvider.GetRequiredService<IEfRepository<Language>>();
 
-                ApplicationDbContextSeeder.Seed(dbContext);
+                dbContext.Database.Migrate();
+
+                ApplicationDbContextSeeder.Seed(langRepo);
             }
 
             loggerFactory.AddConsole(this.configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
@@ -93,11 +113,7 @@
             app.UseResponseCompression();
             app.UseCookiePolicy();
             app.UseAuthentication();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(name: "default", template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

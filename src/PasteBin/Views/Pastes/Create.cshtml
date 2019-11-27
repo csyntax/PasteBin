@@ -1,6 +1,4 @@
-﻿@model PasteBin.Models.Paste
-
-@using PasteBin.ViewModels
+﻿@model PasteBin.Web.Infrastructure.InputModels.PasteInputModel
 
 @{
     ViewData["Title"] = "Create Paste";
@@ -11,7 +9,6 @@
     <div class="alert alert-danger" role="alert">@this.ViewData["Message"]</div>
 }
 
-<cache></cache>
 
 <form asp-controller="Pastes" asp-action="Create" method="post">
     @Html.AntiForgeryToken()
@@ -28,17 +25,16 @@
         <span asp-validation-for="Content" class="text-danger"></span>
     </div>
 
-    <cache>
-        <div class="form-group">
-            <label asp-for="Language" class="control-label">Language</label>
-            <select class="form-control"
-                    asp-for="LanguageId"
-                    asp-items="@(new SelectList(this.ViewData["Languages"] as IEnumerable<LanguageViewModel>, "Id", "Name"))">
-                <option>Please Select..</option>
-            </select>
-            <span asp-validation-for="LanguageId" class="text-danger"></span>
-        </div>
-    </cache>
+
+    <div class="form-group">
+        <label asp-for="Language" class="control-label">Language</label>
+        <select class="form-control"
+                asp-for="Language"
+                asp-items="@Model.Languages">
+            <option>Please Select..</option>
+        </select>
+        <span asp-validation-for="Language" class="text-danger"></span>
+    </div>
 
     <button type="submit" class="btn btn-success">Create</button>
 </form>

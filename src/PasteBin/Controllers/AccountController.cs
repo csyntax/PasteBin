@@ -10,9 +10,9 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Authentication;
 
-    using PasteBin.Models;
-    using PasteBin.Services;
-    using PasteBin.ViewModels.Accounts;
+    using PasteBin.Data.Models;
+    using PasteBin.Services.Web;
+    using PasteBin.Web.Infrastructure.ViewModels.Accounts;
 
     [Authorize]
     [Route("[controller]/[action]")]
@@ -226,7 +226,7 @@
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    //await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");

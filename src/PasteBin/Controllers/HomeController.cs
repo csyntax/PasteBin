@@ -4,7 +4,7 @@
 
     using Microsoft.AspNetCore.Mvc;
 
-    using PasteBin.ViewModels;
+    using PasteBin.Web.Infrastructure.ViewModels;
 
     public class HomeController : Controller
     {

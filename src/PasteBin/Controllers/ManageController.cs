@@ -11,10 +11,9 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
-
-    using PasteBin.Models;
-    using PasteBin.Services;
-    using PasteBin.ViewModels.Manage;
+    using PasteBin.Data.Models;
+    using PasteBin.Services.Web;
+    using PasteBin.Web.Infrastructure.ViewModels.Manage;
 
     [Authorize]
     [Route("[controller]/[action]")]
@@ -124,7 +123,7 @@
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
             var email = user.Email;
-            await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
+            //await _emailSender.SendEmailConfirmationAsync(email, callbackUrl);
 
             StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToAction(nameof(Index));
