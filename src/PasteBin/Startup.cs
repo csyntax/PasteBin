@@ -25,10 +25,12 @@
 
     public class Startup
     {
+        private readonly IWebHostEnvironment env;
         private readonly IConfiguration configuration;
-
-        public Startup(IConfiguration configuration)
+        
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
+            this.env = env;
             this.configuration = configuration;
         }
 
@@ -43,6 +45,8 @@
 
                     options.UseSqlServer(connectionString, c => c.MigrationsAssembly(assembly));
                 });
+
+           
 
             services
                 .AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -68,10 +72,9 @@
             });
 
             services.AddMemoryCache();
-            services.AddResponseCompression();
-
-            services.AddMvc();
             services.AddAutoMapper();
+            services.AddResponseCompression();
+            services.AddControllersWithViews();
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
@@ -84,7 +87,7 @@
             services.AddScoped<ILanguageService, LanguageService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         { 
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
@@ -96,24 +99,27 @@
                 ApplicationDbContextSeeder.Seed(langRepo);
             }
 
-            loggerFactory.AddConsole(this.configuration.GetSection("Logging"));
-
-            if (env.IsDevelopment())
+            if (this.env.EnvironmentName == "Development")
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseRouting();
             app.UseStaticFiles();
-            app.UseResponseCompression();
             app.UseCookiePolicy();
             app.UseAuthentication();
-            app.UseMvcWithDefaultRoute();
+            app.UseAuthorization();
+            app.UseResponseCompression();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
