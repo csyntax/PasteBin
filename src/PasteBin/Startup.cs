@@ -2,12 +2,12 @@
 {
     using System;
 
+    using Microsoft.EntityFrameworkCore;
+
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
 
-    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -46,30 +46,32 @@
                     options.UseSqlServer(connectionString, c => c.MigrationsAssembly(assembly));
                 });
 
-           
-
             services
-                .AddIdentity<ApplicationUser, ApplicationRole>(options =>
+                .Configure<IdentityOptions>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequiredLength = 6;
-                })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddUserStore<ApplicationUserStore>()
-                .AddRoleStore<ApplicationRoleStore>()
-                .AddDefaultTokenProviders();
+                });
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            services
+                .ConfigureApplicationCookie(options =>
+                {
+                    options.Cookie.HttpOnly = true;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Account/Login";
-                options.SlidingExpiration = true;
-            });
+                    options.LoginPath = "/Account/Login";
+                    options.SlidingExpiration = true;
+                });
+
+            services
+                 .AddIdentity<ApplicationUser, ApplicationRole>()
+                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                 .AddUserStore<ApplicationUserStore>()
+                 .AddRoleStore<ApplicationRoleStore>()
+                 .AddDefaultTokenProviders();
 
             services.AddMemoryCache();
             services.AddAutoMapper();
