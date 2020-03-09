@@ -6,6 +6,7 @@
 
     using Infrastructure.Mapping;
     using Infrastructure.ViewModels;
+    using Microsoft.AspNetCore.Builder;
 
     public static class AutoMapperExtensions
     {
@@ -18,6 +19,11 @@
             services.AddScoped<IMapper>(p => new Mapper(p.GetRequiredService<IConfigurationProvider>(), p.GetService));
 
             return services;
+        }
+
+        public static IApplicationBuilder UseAutoMapper(this IApplicationBuilder app)
+        {
+            return app;
         }
     }
 }

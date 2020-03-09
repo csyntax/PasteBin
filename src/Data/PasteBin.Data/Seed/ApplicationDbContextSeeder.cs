@@ -1,15 +1,15 @@
 ﻿namespace PasteBin.Data.Seeding
 {
+    using System.Linq;
     using System.Collections.Generic;
 
-    using Models;
-    using Repositories;
+    using PasteBin.Data.Models;
 
     public static class ApplicationDbContextSeeder
     {
-        public static void Seed(IEfRepository<Language> langRepository)
+        public static void Seed(ApplicationDbContext dbContext)
         {
-            if (langRepository.Any)
+            if (dbContext.Languages.Any())
             {
                 return;
             }
@@ -42,8 +42,8 @@
 
             foreach (var language in languages)
             {
-                langRepository.Add(language);
-                langRepository.SaveChanges();
+                dbContext.Languages.Add(language);
+                dbContext.SaveChanges();
             }
         }
     }

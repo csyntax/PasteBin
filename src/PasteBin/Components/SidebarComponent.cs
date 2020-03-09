@@ -1,7 +1,6 @@
 ﻿namespace PasteBin.Components
 {
     using System.Threading.Tasks;
-    using System.Collections.Generic;
 
     using Microsoft.AspNetCore.Mvc;
 
@@ -30,9 +29,9 @@
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var cacheEntry = await this.cache.GetOrCreateAsync<List<PasteViewModel>>("Pastes", async entry =>
+            var cacheEntry = await this.cache.GetOrCreateAsync("Pastes", async entry =>
             {
-                var pastes = this.pastes.GetAll();
+                var pastes = this.pastes.GetAll().AsNoTracking();
                 var model = await this.mapper.Map<PasteViewModel>(pastes).ToListAsync();
 
                 return model;

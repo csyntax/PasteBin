@@ -2,15 +2,16 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
 
     public class EfRepository<TEntity> : IEfRepository<TEntity>
         where TEntity : class
     {
-        private readonly IApplicationDbContext context;
+        private readonly ApplicationDbContext context;
         private readonly DbSet<TEntity> dbSet;
 
-        public EfRepository(IApplicationDbContext context)
+        public EfRepository(ApplicationDbContext context)
         {
             this.context = context;
             this.dbSet = this.context.Set<TEntity>();
