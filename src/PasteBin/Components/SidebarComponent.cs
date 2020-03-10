@@ -13,14 +13,13 @@
 
     using Web.Infrastructure.ViewModels.Pastes;
 
-    [ViewComponent(Name = "Sidebar")]
-    public class SidebarComponent : ViewComponent
+    public class SidebarViewComponent : ViewComponent
     {
         private readonly IMemoryCache cache;
         private readonly IMappingService mapper;
         private readonly IPasteService pastes;
         
-        public SidebarComponent(IMappingService mapper, IMemoryCache cache, IPasteService pastes)
+        public SidebarViewComponent(IMappingService mapper, IMemoryCache cache, IPasteService pastes)
         {   
             this.cache = cache;
             this.mapper = mapper;

@@ -1,14 +1,17 @@
 ﻿namespace PasteBin.Data.Repositories
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.EntityFrameworkCore;
 
-    public class EfRepository<TEntity> : IEfRepository<TEntity>
+    using PasteBin.Data.Contracts.Repositories;
+
+    public class EfRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
-        private readonly ApplicationDbContext context;
+        protected readonly ApplicationDbContext context;
         private readonly DbSet<TEntity> dbSet;
 
         public EfRepository(ApplicationDbContext context)
@@ -17,13 +20,17 @@
             this.dbSet = this.context.Set<TEntity>();
         }
 
-        public bool Any => this.dbSet.Any();
+        public virtual IQueryable<TEntity> All() => 
+            this.dbSet;
 
-        public IQueryable<TEntity> All() => this.dbSet.AsQueryable();
+        public virtual IQueryable<TEntity> AllAsNoTracking() => 
+            this.dbSet.AsNoTracking();
 
-        public TEntity Get(object id) => this.dbSet.Find(id);
+        public virtual Task<TEntity> GetByIdAsync(object id) =>
+           this.dbSet.FindAsync(id).AsTask();
 
-        public void Add(TEntity entity) => this.dbSet.Add(entity);
+        public virtual Task AddAsync(TEntity entity) => 
+            this.dbSet.AddAsync(entity).AsTask();
 
         public void Update(TEntity entity)
         {
@@ -37,12 +44,22 @@
             entry.State = EntityState.Modified;
         }
 
-        public void Delete(TEntity entity) => this.dbSet.Remove(entity);
+        public virtual void Delete(TEntity entity) => this.dbSet.Remove(entity);
 
-        public int SaveChanges() => this.context.SaveChanges();
+        public Task<int> SaveChangesAsync() => this.context.SaveChangesAsync();
 
-        public async Task<int> SaveChangesAsync() => await this.context.SaveChangesAsync();
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-        public void Dispose() => this.context.Dispose();
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.context?.Dispose();
+            }
+        }
     }
 }

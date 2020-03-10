@@ -34,8 +34,6 @@
                 {
                     map.CreateMappings(configuration);
                 }
-
-                //configuration.ValidateInlineMaps = false;
             });
         }
 
@@ -68,6 +66,6 @@
              from i in t.GetTypeInfo().GetInterfaces()
              where typeof(IHaveCustomMappings).GetTypeInfo().IsAssignableFrom(t) &&
                  !t.GetTypeInfo().IsAbstract && !t.GetTypeInfo().IsInterface
-             select (IHaveCustomMappings)Activator.CreateInstance(t);
+             select (IHaveCustomMappings) Activator.CreateInstance(t);
     }
 }

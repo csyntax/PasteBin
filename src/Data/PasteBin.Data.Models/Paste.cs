@@ -1,20 +1,12 @@
 ﻿namespace PasteBin.Data.Models
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class Paste
+    using PasteBin.Data.Contracts.Models;    
+
+    public class Paste : BaseModel<int>
     {
-        public Paste()
-        {
-            this.Date = DateTime.Now;
-            this.IsPrivate = false;
-        }
-
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         [MinLength(3)]
         [MaxLength(300)]
@@ -23,9 +15,6 @@
         [Required]
         [DataType(DataType.MultilineText)]
         public string Content { get; set; }
-
-        [DataType(DataType.DateTime)]
-        public DateTime Date { get; set; }
 
         public bool IsPrivate { get; set; }
 

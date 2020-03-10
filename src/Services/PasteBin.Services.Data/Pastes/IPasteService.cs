@@ -6,18 +6,14 @@
 
     using PasteBin.Data.Models;
     
-    public interface IPasteService : IDisposable
+    public interface IPasteService  //: IDisposable
     {
         IQueryable<Paste> GetAll();
 
-        Paste Get(int id);
+        Task<int> Add(Paste paste);
 
-        int Add(Paste paste);
+        Task<Paste> Get(int id);
 
-        Task<int> AddAsync(Paste paste);
-
-        int Remove(int id);
-
-        Task<int> RemoveAsync(int id);
+        Task<int> Remove(int id);
     }
 }

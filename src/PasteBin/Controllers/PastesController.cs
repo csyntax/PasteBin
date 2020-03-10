@@ -46,10 +46,10 @@
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var pastes = this.pastes.GetAll();
-            var model = this.mapping.Map<PasteViewModel>(pastes).ToList();
+            var pastes = this.pastes.GetAll().AsNoTracking();
+            var model = await this.mapping.Map<PasteViewModel>(pastes).ToListAsync();
 
             return this.View(model);
         }
@@ -112,17 +112,18 @@
             if (model != null && this.ModelState.IsValid)
             {
                 var user = await this.userManager.GetUserAsync(User);
-                var language = this.languages.Get(model.Language);
+                var language = await this.languages.Get(model.Language);
 
                 var paste = new Paste
                 {
                     Title = model.Title,
                     Content = model.Content,
                     Language = language,
+                   // CreatedOn = DateTime.Now,
                     User = user
                 };
 
-                this.pastes.Add(paste);
+                await this.pastes.Add(paste);
 
                 return this.RedirectToAction(nameof(this.View), new
                 {
@@ -139,7 +140,7 @@
             var lastCommit = this.pastes
                 .GetAll()
                 .Where(p => p.UserId == userId)
-                .OrderByDescending(p => p.Date)
+                .OrderByDescending(p => p.CreatedOn)
                 .FirstOrDefault();
 
             if (lastCommit == null)
@@ -147,7 +148,7 @@
                 return false;
             }
 
-            return lastCommit.Date.AddMinutes(MinutesBetweenPastes) >= DateTime.Now;
+            return lastCommit.CreatedOn.AddMinutes(MinutesBetweenPastes) >= DateTime.Now;
         }
 
         private void GetLanguages()
@@ -168,7 +169,7 @@
         {
             if (disposing)
             {
-                this.pastes.Dispose();
+               // this.pastes.Dispose();
                 this.languages.Dispose();
                 this.userManager.Dispose();
             }

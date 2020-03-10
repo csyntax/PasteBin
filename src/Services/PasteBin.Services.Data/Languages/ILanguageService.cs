@@ -11,6 +11,6 @@
     {
         IQueryable<Language> Get();
 
-        Language Get(int id);
+        Task<Language> Get(int id);
     }
 }
