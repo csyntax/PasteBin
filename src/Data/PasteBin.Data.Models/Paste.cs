@@ -3,9 +3,9 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    using PasteBin.Data.Contracts.Models;    
+    using PasteBin.Data.Contracts.Models;  
 
-    public class Paste : BaseModel<int>
+    public class Paste : BaseDeletableModel<int>
     {
         [Required]
         [MinLength(3)]

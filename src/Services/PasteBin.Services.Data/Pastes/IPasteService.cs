@@ -1,12 +1,11 @@
 ﻿namespace PasteBin.Services.Data.Pastes
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
     using PasteBin.Data.Models;
     
-    public interface IPasteService  //: IDisposable
+    public interface IPasteService
     {
         IQueryable<Paste> GetAll();
 
@@ -14,6 +13,6 @@
 
         Task<Paste> Get(int id);
 
-        Task<int> Remove(int id);
+        Task<int> Delete(int id);
     }
 }

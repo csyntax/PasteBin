@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasteBin", "PasteBin\PasteBin.csproj", "{42432CF0-0567-493A-885D-B3DCE0657551}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasteBin.Web", "Web\PasteBin.Web\PasteBin.Web.csproj", "{42432CF0-0567-493A-885D-B3DCE0657551}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{74A04907-A62C-4529-BF5B-F0E38D5413E4}"
 EndProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasteBin.Web.Infrastructure
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasteBin.Services.Data", "Services\PasteBin.Services.Data\PasteBin.Services.Data.csproj", "{1E43363A-204A-4704-B2A3-014236D8826F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasteBin.Data.Contracts", "Data\PasteBin.Data.Contracts\PasteBin.Data.Contracts.csproj", "{1A6D0D56-B172-4E01-A1C7-C87921F7713D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasteBin.Data.Contracts", "Data\PasteBin.Data.Contracts\PasteBin.Data.Contracts.csproj", "{1A6D0D56-B172-4E01-A1C7-C87921F7713D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +68,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{42432CF0-0567-493A-885D-B3DCE0657551} = {3369EEF0-75ED-4C96-9DE1-693C05019F96}
 		{4504BCF7-B5CE-489B-A7E4-0D67392C3EE2} = {74A04907-A62C-4529-BF5B-F0E38D5413E4}
 		{1EC46EAD-F65A-449D-B3BD-CFBF86DDDF43} = {74A04907-A62C-4529-BF5B-F0E38D5413E4}
 		{A89683CF-4B95-4272-BF6E-AD0765E152E0} = {CC34FAF3-1188-4836-9FB6-7813F962A0A4}

@@ -3,18 +3,18 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    using PasteBin.Data.Contracts.Repositories;
     using PasteBin.Data.Models;
-
+    using PasteBin.Data.Contracts.Repositories;
+   
     public class PasteService : IPasteService
     {
-        private readonly IRepository<Paste> pasteRepo;
+        private readonly IDeletableEntityRepository<Paste> pasteRepo;
 
-        public PasteService(IRepository<Paste> pasteRepo) 
-            => this.pasteRepo = pasteRepo;
+        public PasteService(IDeletableEntityRepository<Paste> pasteRepo) => 
+            this.pasteRepo = pasteRepo;
 
-        public IQueryable<Paste> GetAll() 
-            => this.pasteRepo.All().AsQueryable();
+        public IQueryable<Paste> GetAll() => 
+            this.pasteRepo.AllAsNoTracking();
 
         public async Task<int> Add(Paste paste)
         {
@@ -26,7 +26,7 @@
         public Task<Paste> Get(int id) => 
             this.pasteRepo.GetByIdAsync(id);
 
-        public async Task<int> Remove(int id)
+        public async Task<int> Delete(int id)
         {
             var paste = await this.pasteRepo.GetByIdAsync(id);
 
