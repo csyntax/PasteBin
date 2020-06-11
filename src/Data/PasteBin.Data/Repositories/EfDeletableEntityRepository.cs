@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PasteBin.Data.Contracts.Models;
-using PasteBin.Data.Contracts.Repositories;
-
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace PasteBin.Data.Repositories
+﻿namespace PasteBin.Data.Repositories
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using PasteBin.Data.Contracts.Models;
+    using PasteBin.Data.Contracts.Repositories;
+
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
           where TEntity : class, IDeletableEntity
     {
@@ -20,11 +21,14 @@ namespace PasteBin.Data.Repositories
         public override IQueryable<TEntity> All() =>
             base.All().Where(x => !x.IsDeleted);
 
-        public override IQueryable<TEntity> AllAsNoTracking() => base.AllAsNoTracking().Where(x => !x.IsDeleted);
+        public override IQueryable<TEntity> AllAsNoTracking() => 
+            base.AllAsNoTracking().Where(x => !x.IsDeleted);
 
-        public IQueryable<TEntity> AllWithDeleted() => base.All().IgnoreQueryFilters();
+        public IQueryable<TEntity> AllWithDeleted() =>
+            base.All().IgnoreQueryFilters();
 
-        public IQueryable<TEntity> AllAsNoTrackingWithDeleted() => base.AllAsNoTracking().IgnoreQueryFilters();
+        public IQueryable<TEntity> AllAsNoTrackingWithDeleted() => 
+            base.AllAsNoTracking().IgnoreQueryFilters();
 
         public override async Task<TEntity> GetByIdAsync(object id)
         {
@@ -45,10 +49,8 @@ namespace PasteBin.Data.Repositories
             return this.AllWithDeleted().FirstOrDefaultAsync(byIdPredicate);
         }
 
-        public void HardDelete(TEntity entity)
-        {
-            base.Delete(entity);
-        }
+        public void HardDelete(TEntity entity) =>
+             base.Delete(entity);
 
         public void Undelete(TEntity entity)
         {

@@ -44,9 +44,11 @@
             entry.State = EntityState.Modified;
         }
 
-        public virtual void Delete(TEntity entity) => this.dbSet.Remove(entity);
+        public virtual void Delete(TEntity entity) => 
+            this.dbSet.Remove(entity);
 
-        public Task<int> SaveChangesAsync() => this.context.SaveChangesAsync();
+        public Task<int> SaveChangesAsync() => 
+            this.context.SaveChangesAsync();
 
         public void Dispose()
         {

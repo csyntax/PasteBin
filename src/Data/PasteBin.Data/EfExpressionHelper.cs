@@ -31,7 +31,6 @@
             }
 
             var entityType = typeof(TEntity);
-
             var entityParameter = Expression.Parameter(entityType, "e");
 
             var keyProperties = dbContext.Model.FindEntityType(entityType).FindPrimaryKey().Properties;

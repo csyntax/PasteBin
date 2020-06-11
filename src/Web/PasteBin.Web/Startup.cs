@@ -39,7 +39,7 @@
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddDbContext<ApplicationDbContext>(options =>
+                .AddDbContextPool<ApplicationDbContext>(options =>
                 {
                     var assembly = typeof(ApplicationDbContext).Assembly.FullName;
                     var connectionString = this.configuration.GetConnectionString("DefaultConnection");
@@ -80,6 +80,8 @@
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
             services.AddTransient<IRoleStore<ApplicationRole>, ApplicationRoleStore>();
 
+            services.AddTransient<LanguageListPopulation>();
+
             services.AddAutoMapper();
         }
 
@@ -104,7 +106,6 @@
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
 
             app.UseStaticFiles();
             app.UseCookiePolicy();

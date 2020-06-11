@@ -3,14 +3,12 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Collections.Generic;
 
     using Microsoft.EntityFrameworkCore;
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc.Rendering;
 
     using Microsoft.Extensions.Caching.Memory;
 
@@ -18,11 +16,12 @@
 
     using PasteBin.Services.Data.Pastes;
     using PasteBin.Services.Data.Languages;
+
+    using PasteBin.Services.Web;
     using PasteBin.Services.Web.Mapping;
 
     using PasteBin.Web.Infrastructure.InputModels;
     using PasteBin.Web.Infrastructure.ViewModels.Pastes;
-    
 
     [Authorize]
     public class PastesController : Controller
@@ -62,7 +61,7 @@
        [AllowAnonymous]
         public IActionResult View(int id)
         {
-            var paste = this.pastes.GetAll().Where(x => x.Id == id);
+            var paste = this.pastes.GetAll().AsNoTracking().Where(x => x.Id == id);
             var model = this.mapping.Map<PasteViewModel>(paste).FirstOrDefault();
 
             return this.View(model);
@@ -72,39 +71,27 @@
         [AllowAnonymous]
         public IActionResult Embedded(int id)
         {
-            var paste = this.pastes.GetAll().Where(x => x.Id == id);
+            var paste = this.pastes.GetAll().AsNoTracking().Where(x => x.Id == id);
             var model = this.mapping.Map<PasteEmbeddedViewModel>(paste).FirstOrDefault();
 
             return this.View(model);
         }
         
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create([FromServices] LanguageListPopulation languageListPopulation)
         {
             var model = new PasteInputModel();
 
-            model.Languages = await this.languages.Get()
-                          .Select(lang => new SelectListItem()
-                          {
-                              Value = lang.Id.ToString(),
-                              Text = lang.Name
-                          })
-                          .ToListAsync();
+            model.Languages = await languageListPopulation.PopulateSelectList();
 
             return this.View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PasteInputModel model)
+        public async Task<IActionResult> Create(PasteInputModel model, [FromServices] LanguageListPopulation languageListPopulation)
         {
-            model.Languages = await this.languages.Get()
-                         .Select(lang => new SelectListItem()
-                         {
-                             Value = lang.Id.ToString(),
-                             Text = lang.Name
-                         })
-                         .ToListAsync();
+            model.Languages = await languageListPopulation.PopulateSelectList();
 
             if (this.IsUserCommitedPasteInLastMinute())
             {
@@ -152,20 +139,6 @@
             }
 
             return lastCommit.CreatedOn.AddMinutes(MinutesBetweenPastes) >= DateTime.Now;
-        }
-
-        private void GetLanguages()
-        {
-            if (!this.cache.TryGetValue("languages", out List<LanguageViewModel> cacheEntry))
-            {
-                var languages = this.languages.Get();
-
-                cacheEntry = this.mapping.Map<LanguageViewModel>(languages).ToList();
-
-                this.cache.Set("languages", cacheEntry);
-            }
-
-            this.ViewData["Languages"] = cacheEntry;
         }
     }
 }
